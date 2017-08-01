@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 import BaseInput from "./BaseInput";
-
 
 function TextWidget(props) {
   return <BaseInput {...props} />;
@@ -9,10 +9,7 @@ function TextWidget(props) {
 
 if (process.env.NODE_ENV !== "production") {
   TextWidget.propTypes = {
-    value: PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 }
 

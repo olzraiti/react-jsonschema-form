@@ -30,7 +30,7 @@ describe("DescriptionField", () => {
     const props = {
       description: <em>description</em>,
     };
-    const {node} = createComponent(DescriptionFieldWrapper, props);
+    const { node } = createComponent(DescriptionFieldWrapper, props);
 
     expect(node.tagName).to.equal("DIV");
   });
@@ -39,7 +39,7 @@ describe("DescriptionField", () => {
     const props = {
       description: "description",
     };
-    const {node} = createComponent(DescriptionFieldWrapper, props);
+    const { node } = createComponent(DescriptionFieldWrapper, props);
 
     expect(node.tagName).to.equal("P");
   });
@@ -47,9 +47,9 @@ describe("DescriptionField", () => {
   it("should have the expected id", () => {
     const props = {
       description: "Field description",
-      id: "sample_id"
+      id: "sample_id",
     };
-    const {node} = createComponent(DescriptionFieldWrapper, props);
+    const { node } = createComponent(DescriptionFieldWrapper, props);
 
     expect(node.id).to.equal("sample_id");
   });

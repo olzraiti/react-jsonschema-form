@@ -1,14 +1,13 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 import {
-  defaultFieldValue,
-  getAlternativeWidget,
+  getWidget,
+  getUiOptions,
+  isSelect,
   optionsList,
-  getDefaultRegistry
+  getDefaultRegistry,
 } from "../../utils";
-import TextWidget from "../widgets/TextWidget";
-import SelectWidget from "../widgets/SelectWidget";
-
 
 function StringField(props) {
   const {
@@ -17,40 +16,41 @@ function StringField(props) {
     uiSchema,
     idSchema,
     formData,
-    registry,
     required,
     disabled,
     readonly,
-    onChange
-  } = props;
-  const {title} = schema;
-  const {widgets, formContext} = registry;
-  const widget = uiSchema["ui:widget"] || schema.format;
-  const placeholder = uiSchema["ui:placeholder"] || "";
-  const commonProps = {
-    schema,
-    id: idSchema && idSchema.$id,
-    label: (title === undefined) ? name : title,
-    value: defaultFieldValue(formData, schema),
+    autofocus,
     onChange,
-    required,
-    disabled,
-    readonly,
-    formContext,
-  };
-  if (Array.isArray(schema.enum)) {
-    const enumOptions = optionsList(schema);
-    if (widget) {
-      const Widget = getAlternativeWidget(schema, widget, widgets, {enumOptions});
-      return <Widget {...commonProps} />;
-    }
-    return <SelectWidget options={{enumOptions}} {...commonProps} />;
-  }
-  if (widget) {
-    const Widget = getAlternativeWidget(schema, widget, widgets);
-    return <Widget {...commonProps} placeholder={placeholder} />;
-  }
-  return <TextWidget {...commonProps} placeholder={placeholder} />;
+    onBlur,
+    registry = getDefaultRegistry(),
+  } = props;
+  const { title, format } = schema;
+  const { widgets, formContext } = registry;
+  const enumOptions = isSelect(schema) && optionsList(schema);
+  const defaultWidget = format || (enumOptions ? "select" : "text");
+  const { widget = defaultWidget, placeholder = "", ...options } = getUiOptions(
+    uiSchema
+  );
+  const Widget = getWidget(schema, widget, widgets);
+
+  return (
+    <Widget
+      options={{ ...options, enumOptions }}
+      schema={schema}
+      id={idSchema && idSchema.$id}
+      label={title === undefined ? name : title}
+      value={formData}
+      onChange={onChange}
+      onBlur={onBlur}
+      required={required}
+      disabled={disabled}
+      readonly={readonly}
+      formContext={formContext}
+      autofocus={autofocus}
+      registry={registry}
+      placeholder={placeholder}
+    />
+  );
 }
 
 if (process.env.NODE_ENV !== "production") {
@@ -59,15 +59,12 @@ if (process.env.NODE_ENV !== "production") {
     uiSchema: PropTypes.object.isRequired,
     idSchema: PropTypes.object,
     onChange: PropTypes.func.isRequired,
-    formData: PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-    ]),
+    onBlur: PropTypes.func,
+    formData: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     registry: PropTypes.shape({
-      widgets: PropTypes.objectOf(PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.object,
-      ])).isRequired,
+      widgets: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.func, PropTypes.object])
+      ).isRequired,
       fields: PropTypes.objectOf(PropTypes.func).isRequired,
       definitions: PropTypes.object.isRequired,
       formContext: PropTypes.object.isRequired,
@@ -76,14 +73,15 @@ if (process.env.NODE_ENV !== "production") {
     required: PropTypes.bool,
     disabled: PropTypes.bool,
     readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
   };
 }
 
 StringField.defaultProps = {
   uiSchema: {},
-  registry: getDefaultRegistry(),
   disabled: false,
   readonly: false,
+  autofocus: false,
 };
 
 export default StringField;

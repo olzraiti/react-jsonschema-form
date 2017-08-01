@@ -1,16 +1,22 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
-
-function TextWidget({
-  schema,
-  id,
-  placeholder,
-  value,
-  required,
-  disabled,
-  readonly,
-  onChange
-}) {
+function TextareaWidget(props) {
+  const {
+    id,
+    options,
+    placeholder,
+    value,
+    required,
+    disabled,
+    readonly,
+    autofocus,
+    onChange,
+    onBlur,
+  } = props;
+  const _onChange = ({ target: { value } }) => {
+    return onChange(value === "" ? options.emptyValue : value);
+  };
   return (
     <textarea
       id={id}
@@ -20,19 +26,35 @@ function TextWidget({
       required={required}
       disabled={disabled}
       readOnly={readonly}
-      onChange={(event) => onChange(event.target.value)} />
+      autoFocus={autofocus}
+      rows={options.rows}
+      onBlur={onBlur && (event => onBlur(id, event.target.value))}
+      onChange={_onChange}
+    />
   );
 }
 
+TextareaWidget.defaultProps = {
+  autofocus: false,
+  options: {},
+};
+
 if (process.env.NODE_ENV !== "production") {
-  TextWidget.propTypes = {
+  TextareaWidget.propTypes = {
     schema: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
+    options: PropTypes.shape({
+      rows: PropTypes.number,
+    }),
     value: PropTypes.string,
     required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
     onChange: PropTypes.func,
+    onBlur: PropTypes.func,
   };
 }
 
-export default TextWidget;
+export default TextareaWidget;

@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 import BaseInput from "./BaseInput";
-
 
 function URLWidget(props) {
   return <BaseInput type="url" {...props} />;
