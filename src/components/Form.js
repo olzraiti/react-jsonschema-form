@@ -135,26 +135,29 @@ export default class Form extends Component {
   onSubmit = event => {
     event.preventDefault();
 
-    if (!this.props.noValidate) {
-      //const { errors, errorSchema } = this.validate(this.state.formData);
-      this.validate(this.state.formData).then(({ errors, errorSchema }) => {
-        if (Object.keys(errors).length > 0) {
-          setState(this, { errors, errorSchema }, () => {
-            if (this.props.onError) {
-              this.props.onError(errors);
-            } else {
-              console.error("Form validation failed", errors);
-            }
-          });
-          return;
-        }
-      });
-    } else {
+    const onValidationOK = () => {
       if (this.props.onSubmit) {
         this.props.onSubmit({ ...this.state, status: "submitted" });
       }
       this.setState({ errors: [], errorSchema: {} });
-    }
+    };
+
+    this.props.noValidate
+      ? onValidationOK()
+      : this.validate(this.state.formData).then(({ errors, errorSchema }) => {
+          if (Object.keys(errors).length > 0) {
+            setState(this, { errors, errorSchema }, () => {
+              if (this.props.onError) {
+                this.props.onError(errors);
+              } else {
+                console.error("Form validation failed", errors);
+              }
+            });
+            return;
+          } else {
+            onValidationOK();
+          }
+        });
   };
 
   getRegistry() {
