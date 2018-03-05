@@ -327,12 +327,11 @@ class ArrayField extends Component {
       readonly,
       autofocus,
       registry = getDefaultRegistry(),
-      formContext,
       onBlur,
       onFocus,
     } = this.props;
     const title = schema.title === undefined ? name : schema.title;
-    const { ArrayFieldTemplate, definitions, fields } = registry;
+    const { ArrayFieldTemplate, definitions, fields, formContext } = registry;
     const { TitleField, DescriptionField } = fields;
     const itemsSchema = retrieveSchema(schema.items, definitions);
     const arrayProps = {
@@ -476,7 +475,7 @@ class ArrayField extends Component {
     } = this.props;
     const title = schema.title || name;
     let items = this.props.formData;
-    const { ArrayFieldTemplate, definitions, fields } = registry;
+    const { ArrayFieldTemplate, definitions, fields, formContext } = registry;
     const { TitleField } = fields;
     const itemSchemas = schema.items.map((item, index) =>
       retrieveSchema(item, definitions, formData[index])
@@ -539,6 +538,7 @@ class ArrayField extends Component {
       uiSchema,
       title,
       TitleField,
+      formContext,
     };
 
     // Check if a custom template template was passed in
