@@ -179,7 +179,8 @@ export default function validateFormData(
   if (customValidate) {
     const errorResponse = customValidate(
       formData,
-      createErrorHandler(formData)
+      createErrorHandler(formData),
+      errors
     );
 
     // errorResponse is either the result or a promise that resolves the result.
