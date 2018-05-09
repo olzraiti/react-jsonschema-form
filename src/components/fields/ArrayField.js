@@ -567,7 +567,9 @@ class ArrayField extends Component {
       uiSchema,
       registry = getDefaultRegistry(),
     } = this.props;
-    const { fields: { SchemaField } } = registry;
+    const {
+      fields: { SchemaField },
+    } = registry;
     const { orderable, removable } = {
       orderable: true,
       removable: true,
