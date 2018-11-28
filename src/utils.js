@@ -120,13 +120,13 @@ function computeDefaults(schema, parentDefaults, formData, definitions) {
           minItemsLength && isMultiSelect(schema, definitions)
             ? 0
             : Array.isArray(formData)
-              ? Math.max(formData.length, minItemsLength)
-              : Math.max(
-                  (schema.default || []).length,
-                  (parentDefaults || []).length,
-                  minItemsLength,
-                  Array.isArray(schema.items) ? schema.items.length : 0
-                );
+            ? Math.max(formData.length, minItemsLength)
+            : Math.max(
+                (schema.default || []).length,
+                (parentDefaults || []).length,
+                minItemsLength,
+                Array.isArray(schema.items) ? schema.items.length : 0
+              );
         return new Array(length).fill(undefined).map((_, i) => {
           let childSchema = undefined;
 
