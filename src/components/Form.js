@@ -195,7 +195,6 @@ export default class Form extends Component {
     const registry = this.getRegistry();
     const _SchemaField = registry.fields.SchemaField;
 
-    console.log(this.props.validators);
     return (
       <form
         className={className ? className : "rjsf"}
