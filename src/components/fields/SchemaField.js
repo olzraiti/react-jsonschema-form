@@ -203,6 +203,8 @@ function SchemaFieldRender(props) {
       autofocus={autofocus}
       errorSchema={fieldErrorSchema}
       formContext={formContext}
+      validators={props.validators || {}}
+      warnings={props.warnings || {}}
     />
   );
 

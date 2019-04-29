@@ -117,6 +117,8 @@ class ObjectField extends Component {
               registry={registry}
               disabled={disabled}
               readonly={readonly}
+              validators={(this.props.validators.properties || {})[name] || {}}
+              warnings={(this.props.warnings.properties || {})[name] || {}}
             />
           ),
           name,

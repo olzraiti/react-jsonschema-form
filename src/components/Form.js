@@ -195,6 +195,7 @@ export default class Form extends Component {
     const registry = this.getRegistry();
     const _SchemaField = registry.fields.SchemaField;
 
+    console.log(this.props.validators);
     return (
       <form
         className={className ? className : "rjsf"}
@@ -220,6 +221,8 @@ export default class Form extends Component {
           onFocus={this.onFocus}
           registry={registry}
           safeRenderCompletion={safeRenderCompletion}
+          validators={this.props.validators}
+          warnings={this.props.warnings}
         />
         {children ? (
           children
