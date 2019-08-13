@@ -119,7 +119,7 @@ export default class Form extends Component {
     const { errors, errorSchema, schema, uiSchema } = this.state;
     const { ErrorList, showErrorList, formContext } = this.props;
 
-    if (errors.length && showErrorList != false) {
+    if (errors && errors.length && showErrorList != false) {
       return (
         <ErrorList
           errors={errors}
@@ -172,6 +172,14 @@ export default class Form extends Component {
   };
 
   onChange = (formData, newErrorSchema) => {
+    const setStateAndBackPropagate = state => {
+      setState(this, state, () => {
+        if (state.formData && this.props.onChange) {
+          this.props.onChange(this.state);
+        }
+      });
+    };
+
     if (isObject(formData) || Array.isArray(formData)) {
       const newState = this.getStateFromProps(this.props, formData);
       formData = newState.formData;
@@ -195,20 +203,19 @@ export default class Form extends Component {
     }
 
     if (mustValidate) {
-      const { errors, errorSchema } = this.validate(newFormData);
-      state = { formData: newFormData, errors, errorSchema };
+      this.validate(newFormData).then(stateError =>
+        setStateAndBackPropagate({ ...state, ...stateError })
+      );
     } else if (!this.props.noValidate && newErrorSchema) {
       state = {
         formData: newFormData,
         errorSchema: newErrorSchema,
         errors: toErrorList(newErrorSchema),
       };
+      setStateAndBackPropagate(state);
+    } else {
+      setStateAndBackPropagate(state);
     }
-    setState(this, state, () => {
-      if (this.props.onChange) {
-        this.props.onChange(this.state);
-      }
-    });
   };
 
   onBlur = (...args) => {
@@ -239,31 +246,37 @@ export default class Form extends Component {
       newFormData = this.getUsedFormData(this.state.formData, fieldNames);
     }
 
-    if (!this.props.noValidate) {
-      const { errors, errorSchema } = this.validate(newFormData);
-      if (Object.keys(errors).length > 0) {
-        setState(this, { errors, errorSchema }, () => {
-          if (this.props.onError) {
-            this.props.onError(errors);
-          } else {
-            console.error("Form validation failed", errors);
+    const onValidationOK = () => {
+      this.setState(
+        { formData: newFormData, errors: [], errorSchema: {} },
+        () => {
+          if (this.props.onSubmit) {
+            this.props.onSubmit(
+              { ...this.state, formData: newFormData, status: "submitted" },
+              event
+            );
           }
-        });
-        return;
-      }
-    }
-
-    this.setState(
-      { formData: newFormData, errors: [], errorSchema: {} },
-      () => {
-        if (this.props.onSubmit) {
-          this.props.onSubmit(
-            { ...this.state, formData: newFormData, status: "submitted" },
-            event
-          );
         }
-      }
-    );
+      );
+    };
+
+    if (!this.props.noValidate) {
+      this.validate(newFormData).then(({ errors, errorSchema }) => {
+        if (Object.keys(errors).length > 0) {
+          setState(this, { errors, errorSchema }, () => {
+            if (this.props.onError) {
+              this.props.onError(errors);
+            } else {
+              console.error("Form validation failed", errors);
+            }
+          });
+        } else {
+          onValidationOK();
+        }
+      });
+    } else {
+      onValidationOK();
+    }
   };
 
   getRegistry() {
