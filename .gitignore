@@ -115,9 +115,11 @@ $RECYCLE.BIN/
 
 # Package specific files
 
+build
 _build
 site
 dist
+lib
 yarn.lock
 
 # IDE
