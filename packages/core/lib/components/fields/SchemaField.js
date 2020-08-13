@@ -1,47 +1,17 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectWithoutProperties"));
-
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/object/keys"));
-
-var _utils = require("../../utils");
-
-var _IconButton = _interopRequireDefault(require("../IconButton"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var types = _interopRequireWildcard(require("../../types"));
-
-var _UnsupportedField = _interopRequireDefault(require("./UnsupportedField"));
-
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
+import _objectSpread from "@babel/runtime-corejs2/helpers/esm/objectSpread";
+import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
+import _Object$keys from "@babel/runtime-corejs2/core-js/object/keys";
+import IconButton from "../IconButton";
+import React from "react";
+import PropTypes from "prop-types";
+import * as types from "../../types";
+import { ADDITIONAL_PROPERTY_FLAG, isSelect, retrieveSchema, toIdSchema, getDefaultRegistry, mergeObjects, deepEquals, getSchemaType, getDisplayLabel } from "../../utils";
 var REQUIRED_FIELD_SYMBOL = "*";
 var COMPONENT_TYPES = {
   array: "ArrayField",
@@ -64,7 +34,7 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
     return fields[field];
   }
 
-  var componentName = COMPONENT_TYPES[(0, _utils.getSchemaType)(schema)]; // If the type is not defined and the schema uses 'anyOf' or 'oneOf', don't
+  var componentName = COMPONENT_TYPES[getSchemaType(schema)]; // If the type is not defined and the schema uses 'anyOf' or 'oneOf', don't
   // render a field and let the MultiSchemaField component handle the form display
 
   if (!componentName && (schema.anyOf || schema.oneOf)) {
@@ -74,7 +44,8 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
   }
 
   return componentName in fields ? fields[componentName] : function () {
-    return _react["default"].createElement(_UnsupportedField["default"], {
+    var UnsupportedField = fields.UnsupportedField;
+    return React.createElement(UnsupportedField, {
       schema: schema,
       idSchema: idSchema,
       reason: "Unknown field type ".concat(schema.type)
@@ -91,10 +62,10 @@ function Label(props) {
     return null;
   }
 
-  return _react["default"].createElement("label", {
+  return React.createElement("label", {
     className: "control-label",
     htmlFor: id
-  }, label, required && _react["default"].createElement("span", {
+  }, label, required && React.createElement("span", {
     className: "required"
   }, REQUIRED_FIELD_SYMBOL));
 }
@@ -103,7 +74,7 @@ function LabelInput(props) {
   var id = props.id,
       label = props.label,
       onChange = props.onChange;
-  return _react["default"].createElement("input", {
+  return React.createElement("input", {
     className: "form-control",
     type: "text",
     id: id,
@@ -122,12 +93,12 @@ function Help(props) {
   }
 
   if (typeof help === "string") {
-    return _react["default"].createElement("p", {
+    return React.createElement("p", {
       className: "help-block"
     }, help);
   }
 
-  return _react["default"].createElement("div", {
+  return React.createElement("div", {
     className: "help-block"
   }, help);
 }
@@ -140,12 +111,12 @@ function ErrorList(props) {
     return null;
   }
 
-  return _react["default"].createElement("div", null, _react["default"].createElement("ul", {
+  return React.createElement("div", null, React.createElement("ul", {
     className: "error-detail bs-callout bs-callout-info"
   }, errors.filter(function (elem) {
     return !!elem;
   }).map(function (error, index) {
-    return _react["default"].createElement("li", {
+    return React.createElement("li", {
       className: "text-danger",
       key: index
     }, error);
@@ -164,12 +135,12 @@ function DefaultTemplate(props) {
       displayLabel = props.displayLabel;
 
   if (hidden) {
-    return _react["default"].createElement("div", {
+    return React.createElement("div", {
       className: "hidden"
     }, children);
   }
 
-  return _react["default"].createElement(WrapIfAdditional, props, displayLabel && _react["default"].createElement(Label, {
+  return React.createElement(WrapIfAdditional, props, displayLabel && React.createElement(Label, {
     label: label,
     required: required,
     id: id
@@ -178,22 +149,22 @@ function DefaultTemplate(props) {
 
 if (process.env.NODE_ENV !== "production") {
   DefaultTemplate.propTypes = {
-    id: _propTypes["default"].string,
-    classNames: _propTypes["default"].string,
-    label: _propTypes["default"].string,
-    children: _propTypes["default"].node.isRequired,
-    errors: _propTypes["default"].element,
-    rawErrors: _propTypes["default"].arrayOf(_propTypes["default"].string),
-    help: _propTypes["default"].element,
-    rawHelp: _propTypes["default"].oneOfType([_propTypes["default"].string, _propTypes["default"].element]),
-    description: _propTypes["default"].element,
-    rawDescription: _propTypes["default"].oneOfType([_propTypes["default"].string, _propTypes["default"].element]),
-    hidden: _propTypes["default"].bool,
-    required: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    displayLabel: _propTypes["default"].bool,
-    fields: _propTypes["default"].object,
-    formContext: _propTypes["default"].object
+    id: PropTypes.string,
+    classNames: PropTypes.string,
+    label: PropTypes.string,
+    children: PropTypes.node.isRequired,
+    errors: PropTypes.element,
+    rawErrors: PropTypes.arrayOf(PropTypes.string),
+    help: PropTypes.element,
+    rawHelp: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    description: PropTypes.element,
+    rawDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    hidden: PropTypes.bool,
+    required: PropTypes.bool,
+    readonly: PropTypes.bool,
+    displayLabel: PropTypes.bool,
+    fields: PropTypes.object,
+    formContext: PropTypes.object
   };
 }
 
@@ -216,36 +187,36 @@ function WrapIfAdditional(props) {
       schema = props.schema;
   var keyLabel = "".concat(label, " Key"); // i18n ?
 
-  var additional = schema.hasOwnProperty(_utils.ADDITIONAL_PROPERTY_FLAG);
+  var additional = schema.hasOwnProperty(ADDITIONAL_PROPERTY_FLAG);
 
   if (!additional) {
-    return _react["default"].createElement("div", {
+    return React.createElement("div", {
       className: classNames
     }, props.children);
   }
 
-  return _react["default"].createElement("div", {
+  return React.createElement("div", {
     className: classNames
-  }, _react["default"].createElement("div", {
+  }, React.createElement("div", {
     className: "row"
-  }, _react["default"].createElement("div", {
+  }, React.createElement("div", {
     className: "col-xs-5 form-additional"
-  }, _react["default"].createElement("div", {
+  }, React.createElement("div", {
     className: "form-group"
-  }, _react["default"].createElement(Label, {
+  }, React.createElement(Label, {
     label: keyLabel,
     required: required,
     id: "".concat(id, "-key")
-  }), _react["default"].createElement(LabelInput, {
+  }), React.createElement(LabelInput, {
     label: label,
     required: required,
     id: "".concat(id, "-key"),
     onChange: onKeyChange
-  }))), _react["default"].createElement("div", {
+  }))), React.createElement("div", {
     className: "form-additional form-group col-xs-5"
-  }, props.children), _react["default"].createElement("div", {
+  }, props.children), React.createElement("div", {
     className: "col-xs-2"
-  }, _react["default"].createElement(_IconButton["default"], {
+  }, React.createElement(IconButton, {
     type: "danger",
     icon: "remove",
     className: "array-item-remove btn-block",
@@ -268,53 +239,36 @@ function SchemaFieldRender(props) {
       onDropPropertyClick = props.onDropPropertyClick,
       required = props.required,
       _props$registry = props.registry,
-      registry = _props$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _props$registry,
+      registry = _props$registry === void 0 ? getDefaultRegistry() : _props$registry,
       _props$wasPropertyKey = props.wasPropertyKeyModified,
       wasPropertyKeyModified = _props$wasPropertyKey === void 0 ? false : _props$wasPropertyKey;
-  var definitions = registry.definitions,
+  var rootSchema = registry.rootSchema,
       fields = registry.fields,
       formContext = registry.formContext;
   var FieldTemplate = uiSchema["ui:FieldTemplate"] || registry.FieldTemplate || DefaultTemplate;
   var idSchema = props.idSchema;
-  var schema = (0, _utils.retrieveSchema)(props.schema, definitions, formData);
-  idSchema = (0, _utils.mergeObjects)((0, _utils.toIdSchema)(schema, null, definitions, formData, idPrefix), idSchema);
+  var schema = retrieveSchema(props.schema, rootSchema, formData);
+  idSchema = mergeObjects(toIdSchema(schema, null, rootSchema, formData, idPrefix), idSchema);
   var FieldComponent = getFieldComponent(schema, uiSchema, idSchema, fields);
   var DescriptionField = fields.DescriptionField;
   var disabled = Boolean(props.disabled || uiSchema["ui:disabled"]);
   var readonly = Boolean(props.readonly || uiSchema["ui:readonly"] || props.schema.readOnly || schema.readOnly);
   var autofocus = Boolean(props.autofocus || uiSchema["ui:autofocus"]);
 
-  if ((0, _keys["default"])(schema).length === 0) {
+  if (_Object$keys(schema).length === 0) {
     return null;
   }
 
-  var uiOptions = (0, _utils.getUiOptions)(uiSchema);
-  var _uiOptions$label = uiOptions.label,
-      displayLabel = _uiOptions$label === void 0 ? true : _uiOptions$label;
-
-  if (schema.type === "array") {
-    displayLabel = (0, _utils.isMultiSelect)(schema, definitions) || (0, _utils.isFilesArray)(schema, uiSchema, definitions);
-  }
-
-  if (schema.type === "object") {
-    displayLabel = false;
-  }
-
-  if (schema.type === "boolean" && !uiSchema["ui:widget"]) {
-    displayLabel = false;
-  }
-
-  if (uiSchema["ui:field"]) {
-    displayLabel = false;
-  }
+  var displayLabel = getDisplayLabel(schema, uiSchema, rootSchema);
 
   var __errors = errorSchema.__errors,
-      fieldErrorSchema = (0, _objectWithoutProperties2["default"])(errorSchema, ["__errors"]); // See #439: uiSchema: Don't pass consumed class names to child components
+      fieldErrorSchema = _objectWithoutProperties(errorSchema, ["__errors"]); // See #439: uiSchema: Don't pass consumed class names to child components
 
-  var field = _react["default"].createElement(FieldComponent, (0, _extends2["default"])({}, props, {
+
+  var field = React.createElement(FieldComponent, _extends({}, props, {
     idSchema: idSchema,
     schema: schema,
-    uiSchema: (0, _objectSpread2["default"])({}, uiSchema, {
+    uiSchema: _objectSpread({}, uiSchema, {
       classNames: undefined
     }),
     disabled: disabled,
@@ -324,7 +278,6 @@ function SchemaFieldRender(props) {
     formContext: formContext,
     rawErrors: __errors
   }));
-
   var type = schema.type;
   var id = idSchema.$id; // If this schema has a title defined, but the user has set a new key/label, retain their input.
 
@@ -342,17 +295,17 @@ function SchemaFieldRender(props) {
   var hidden = uiSchema["ui:widget"] === "hidden";
   var classNames = ["form-group", "field", "field-".concat(type), errors && errors.length > 0 ? "field-error has-error has-danger" : "", uiSchema.classNames].join(" ").trim();
   var fieldProps = {
-    description: _react["default"].createElement(DescriptionField, {
+    description: React.createElement(DescriptionField, {
       id: id + "__description",
       description: description,
       formContext: formContext
     }),
     rawDescription: description,
-    help: _react["default"].createElement(Help, {
+    help: React.createElement(Help, {
       help: help
     }),
     rawHelp: typeof help === "string" ? help : undefined,
-    errors: _react["default"].createElement(ErrorList, {
+    errors: React.createElement(ErrorList, {
       errors: errors
     }),
     rawErrors: errors,
@@ -369,11 +322,12 @@ function SchemaFieldRender(props) {
     formContext: formContext,
     fields: fields,
     schema: schema,
-    uiSchema: uiSchema
+    uiSchema: uiSchema,
+    registry: registry
   };
   var _AnyOfField = registry.fields.AnyOfField;
   var _OneOfField = registry.fields.OneOfField;
-  return _react["default"].createElement(FieldTemplate, fieldProps, field, schema.anyOf && !(0, _utils.isSelect)(schema) && _react["default"].createElement(_AnyOfField, {
+  return React.createElement(FieldTemplate, fieldProps, React.createElement(React.Fragment, null, field, schema.anyOf && !isSelect(schema) && React.createElement(_AnyOfField, {
     disabled: disabled,
     errorSchema: errorSchema,
     formData: formData,
@@ -387,7 +341,7 @@ function SchemaFieldRender(props) {
     registry: registry,
     schema: schema,
     uiSchema: uiSchema
-  }), schema.oneOf && !(0, _utils.isSelect)(schema) && _react["default"].createElement(_OneOfField, {
+  }), schema.oneOf && !isSelect(schema) && React.createElement(_OneOfField, {
     disabled: disabled,
     errorSchema: errorSchema,
     formData: formData,
@@ -401,23 +355,24 @@ function SchemaFieldRender(props) {
     registry: registry,
     schema: schema,
     uiSchema: uiSchema
-  }));
+  })));
 }
 
 var SchemaField =
 /*#__PURE__*/
 function (_React$Component) {
-  (0, _inherits2["default"])(SchemaField, _React$Component);
+  _inherits(SchemaField, _React$Component);
 
   function SchemaField() {
-    (0, _classCallCheck2["default"])(this, SchemaField);
-    return (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(SchemaField).apply(this, arguments));
+    _classCallCheck(this, SchemaField);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(SchemaField).apply(this, arguments));
   }
 
-  (0, _createClass2["default"])(SchemaField, [{
+  _createClass(SchemaField, [{
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !(0, _utils.deepEquals)(this.props, nextProps);
+      return !deepEquals(this.props, nextProps);
     }
   }, {
     key: "render",
@@ -425,8 +380,9 @@ function (_React$Component) {
       return SchemaFieldRender(this.props);
     }
   }]);
+
   return SchemaField;
-}(_react["default"].Component);
+}(React.Component);
 
 SchemaField.defaultProps = {
   uiSchema: {},
@@ -439,14 +395,13 @@ SchemaField.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   SchemaField.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    uiSchema: _propTypes["default"].object,
-    idSchema: _propTypes["default"].object,
-    formData: _propTypes["default"].any,
-    errorSchema: _propTypes["default"].object,
+    schema: PropTypes.object.isRequired,
+    uiSchema: PropTypes.object,
+    idSchema: PropTypes.object,
+    formData: PropTypes.any,
+    errorSchema: PropTypes.object,
     registry: types.registry.isRequired
   };
 }
 
-var _default = SchemaField;
-exports["default"] = _default;
+export default SchemaField;

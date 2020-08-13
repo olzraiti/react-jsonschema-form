@@ -1,40 +1,15 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
-
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/object/keys"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _utils = require("../../utils");
+import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _assertThisInitialized from "@babel/runtime-corejs2/helpers/esm/assertThisInitialized";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
+import _Object$keys from "@babel/runtime-corejs2/core-js/object/keys";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { shouldRender, parseDateString, toDateString, pad } from "../../utils";
 
 function rangeOptions(start, stop) {
   var options = [];
@@ -42,7 +17,7 @@ function rangeOptions(start, stop) {
   for (var i = start; i <= stop; i++) {
     options.push({
       value: i,
-      label: (0, _utils.pad)(i, 2)
+      label: pad(i, 2)
     });
   }
 
@@ -50,7 +25,7 @@ function rangeOptions(start, stop) {
 }
 
 function readyForChange(state) {
-  return (0, _keys["default"])(state).every(function (key) {
+  return _Object$keys(state).every(function (key) {
     return state[key] !== -1;
   });
 }
@@ -68,7 +43,7 @@ function DateElement(props) {
       onBlur = props.onBlur;
   var id = rootId + "_" + type;
   var SelectWidget = registry.widgets.SelectWidget;
-  return _react["default"].createElement(SelectWidget, {
+  return React.createElement(SelectWidget, {
     schema: {
       type: "integer"
     },
@@ -92,22 +67,25 @@ function DateElement(props) {
 var AltDateWidget =
 /*#__PURE__*/
 function (_Component) {
-  (0, _inherits2["default"])(AltDateWidget, _Component);
+  _inherits(AltDateWidget, _Component);
 
   function AltDateWidget(props) {
     var _this;
 
-    (0, _classCallCheck2["default"])(this, AltDateWidget);
-    _this = (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(AltDateWidget).call(this, props));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onChange", function (property, value) {
-      _this.setState((0, _defineProperty2["default"])({}, property, typeof value === "undefined" ? -1 : value), function () {
+    _classCallCheck(this, AltDateWidget);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AltDateWidget).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "onChange", function (property, value) {
+      _this.setState(_defineProperty({}, property, typeof value === "undefined" ? -1 : value), function () {
         // Only propagate to parent state if we have a complete date{time}
         if (readyForChange(_this.state)) {
-          _this.props.onChange((0, _utils.toDateString)(_this.state, _this.props.time));
+          _this.props.onChange(toDateString(_this.state, _this.props.time));
         }
       });
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "setNow", function (event) {
+
+    _defineProperty(_assertThisInitialized(_this), "setNow", function (event) {
       event.preventDefault();
       var _this$props = _this.props,
           time = _this$props.time,
@@ -119,13 +97,14 @@ function (_Component) {
         return;
       }
 
-      var nowDateObj = (0, _utils.parseDateString)(new Date().toJSON(), time);
+      var nowDateObj = parseDateString(new Date().toJSON(), time);
 
       _this.setState(nowDateObj, function () {
-        return onChange((0, _utils.toDateString)(_this.state, time));
+        return onChange(toDateString(_this.state, time));
       });
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "clear", function (event) {
+
+    _defineProperty(_assertThisInitialized(_this), "clear", function (event) {
       event.preventDefault();
       var _this$props2 = _this.props,
           time = _this$props2.time,
@@ -137,23 +116,24 @@ function (_Component) {
         return;
       }
 
-      _this.setState((0, _utils.parseDateString)("", time), function () {
+      _this.setState(parseDateString("", time), function () {
         return onChange(undefined);
       });
     });
-    _this.state = (0, _utils.parseDateString)(props.value, props.time);
+
+    _this.state = parseDateString(props.value, props.time);
     return _this;
   }
 
-  (0, _createClass2["default"])(AltDateWidget, [{
+  _createClass(AltDateWidget, [{
     key: "UNSAFE_componentWillReceiveProps",
     value: function UNSAFE_componentWillReceiveProps(nextProps) {
-      this.setState((0, _utils.parseDateString)(nextProps.value, nextProps.time));
+      this.setState(parseDateString(nextProps.value, nextProps.time));
     }
   }, {
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return (0, _utils.shouldRender)(this, nextProps, nextState);
+      return shouldRender(this, nextProps, nextState);
     }
   }, {
     key: "render",
@@ -168,12 +148,12 @@ function (_Component) {
           registry = _this$props3.registry,
           onBlur = _this$props3.onBlur,
           options = _this$props3.options;
-      return _react["default"].createElement("ul", {
+      return React.createElement("ul", {
         className: "list-inline"
       }, this.dateElementProps.map(function (elemProps, i) {
-        return _react["default"].createElement("li", {
+        return React.createElement("li", {
           key: i
-        }, _react["default"].createElement(DateElement, (0, _extends2["default"])({
+        }, React.createElement(DateElement, _extends({
           rootId: id,
           select: _this2.onChange
         }, elemProps, {
@@ -183,11 +163,11 @@ function (_Component) {
           onBlur: onBlur,
           autofocus: autofocus && i === 0
         })));
-      }), (options.hideNowButton !== "undefined" ? !options.hideNowButton : true) && _react["default"].createElement("li", null, _react["default"].createElement("a", {
+      }), (options.hideNowButton !== "undefined" ? !options.hideNowButton : true) && React.createElement("li", null, React.createElement("a", {
         href: "#",
         className: "btn btn-info btn-now",
         onClick: this.setNow
-      }, "Now")), (options.hideClearButton !== "undefined" ? !options.hideClearButton : true) && _react["default"].createElement("li", null, _react["default"].createElement("a", {
+      }, "Now")), (options.hideClearButton !== "undefined" ? !options.hideClearButton : true) && React.createElement("li", null, React.createElement("a", {
         href: "#",
         className: "btn btn-warning btn-clear",
         onClick: this.clear
@@ -239,10 +219,11 @@ function (_Component) {
       return data;
     }
   }]);
-  return AltDateWidget;
-}(_react.Component);
 
-(0, _defineProperty2["default"])(AltDateWidget, "defaultProps", {
+  return AltDateWidget;
+}(Component);
+
+_defineProperty(AltDateWidget, "defaultProps", {
   time: false,
   disabled: false,
   readonly: false,
@@ -254,19 +235,18 @@ function (_Component) {
 
 if (process.env.NODE_ENV !== "production") {
   AltDateWidget.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    id: _propTypes["default"].string.isRequired,
-    value: _propTypes["default"].string,
-    required: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func,
-    onBlur: _propTypes["default"].func,
-    time: _propTypes["default"].bool,
-    options: _propTypes["default"].object
+    schema: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    time: PropTypes.bool,
+    options: PropTypes.object
   };
 }
 
-var _default = AltDateWidget;
-exports["default"] = _default;
+export default AltDateWidget;

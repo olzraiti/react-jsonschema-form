@@ -1,49 +1,6 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _DescriptionField = _interopRequireDefault(require("../fields/DescriptionField.js"));
-
-// Check to see if a schema specifies that a value must be true
-function schemaRequiresTrueValue(schema) {
-  // Check if const is a truthy value
-  if (schema["const"]) {
-    return true;
-  } // Check if an enum has a single value of true
-
-
-  if (schema["enum"] && schema["enum"].length === 1 && schema["enum"][0] === true) {
-    return true;
-  } // If anyOf has a single value, evaluate the subschema
-
-
-  if (schema.anyOf && schema.anyOf.length === 1) {
-    return schemaRequiresTrueValue(schema.anyOf[0]);
-  } // If oneOf has a single value, evaluate the subschema
-
-
-  if (schema.oneOf && schema.oneOf.length === 1) {
-    return schemaRequiresTrueValue(schema.oneOf[0]);
-  } // Evaluate each subschema in allOf, to see if one of them requires a true
-  // value
-
-
-  if (schema.allOf) {
-    return schema.allOf.some(schemaRequiresTrueValue);
-  }
-}
+import React from "react";
+import PropTypes from "prop-types";
+import { schemaRequiresTrueValue } from "../../utils";
 
 function CheckboxWidget(props) {
   var schema = props.schema,
@@ -55,16 +12,17 @@ function CheckboxWidget(props) {
       autofocus = props.autofocus,
       onBlur = props.onBlur,
       onFocus = props.onFocus,
-      _onChange = props.onChange; // Because an unchecked checkbox will cause html5 validation to fail, only add
+      _onChange = props.onChange,
+      DescriptionField = props.DescriptionField; // Because an unchecked checkbox will cause html5 validation to fail, only add
   // the "required" attribute if the field value must be "true", due to the
   // "const" or "enum" keywords
 
   var required = schemaRequiresTrueValue(schema);
-  return _react["default"].createElement("div", {
+  return React.createElement("div", {
     className: "checkbox ".concat(disabled || readonly ? "disabled" : "")
-  }, schema.description && _react["default"].createElement(_DescriptionField["default"], {
+  }, schema.description && React.createElement(DescriptionField, {
     description: schema.description
-  }), _react["default"].createElement("label", null, _react["default"].createElement("input", {
+  }), React.createElement("label", null, React.createElement("input", {
     type: "checkbox",
     id: id,
     checked: typeof value === "undefined" ? false : value,
@@ -80,7 +38,7 @@ function CheckboxWidget(props) {
     onFocus: onFocus && function (event) {
       return onFocus(id, event.target.checked);
     }
-  }), _react["default"].createElement("span", null, label)));
+  }), React.createElement("span", null, label)));
 }
 
 CheckboxWidget.defaultProps = {
@@ -89,16 +47,15 @@ CheckboxWidget.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   CheckboxWidget.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    id: _propTypes["default"].string.isRequired,
-    value: _propTypes["default"].bool,
-    required: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func
+    schema: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    value: PropTypes.bool,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func
   };
 }
 
-var _default = CheckboxWidget;
-exports["default"] = _default;
+export default CheckboxWidget;

@@ -1,58 +1,23 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/object/keys"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectWithoutProperties"));
-
-var _objectSpread3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
-
-var _parseInt2 = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/parse-int"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
-
-var _isArray = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/array/is-array"));
-
-var _AddButton = _interopRequireDefault(require("../AddButton"));
-
-var _IconButton = _interopRequireDefault(require("../IconButton"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _includes = _interopRequireDefault(require("core-js/library/fn/array/includes"));
-
-var types = _interopRequireWildcard(require("../../types"));
-
-var _UnsupportedField = _interopRequireDefault(require("./UnsupportedField"));
-
-var _utils = require("../../utils");
-
-var _shortid = _interopRequireDefault(require("shortid"));
+import _Object$keys from "@babel/runtime-corejs2/core-js/object/keys";
+import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
+import _objectSpread from "@babel/runtime-corejs2/helpers/esm/objectSpread";
+import _parseInt from "@babel/runtime-corejs2/core-js/parse-int";
+import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray";
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _assertThisInitialized from "@babel/runtime-corejs2/helpers/esm/assertThisInitialized";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
+import _Array$isArray from "@babel/runtime-corejs2/core-js/array/is-array";
+import AddButton from "../AddButton";
+import IconButton from "../IconButton";
+import React, { Component } from "react";
+import includes from "core-js/library/fn/array/includes";
+import * as types from "../../types";
+import { getWidget, getDefaultFormState, getUiOptions, isMultiSelect, isFilesArray, isFixedItems, allowAdditionalItems, optionsList, retrieveSchema, toIdSchema, getDefaultRegistry } from "../../utils";
+import shortid from "shortid";
 
 function ArrayFieldTitle(_ref) {
   var TitleField = _ref.TitleField,
@@ -65,7 +30,7 @@ function ArrayFieldTitle(_ref) {
   }
 
   var id = "".concat(idSchema.$id, "__title");
-  return _react["default"].createElement(TitleField, {
+  return React.createElement(TitleField, {
     id: id,
     title: title,
     required: required
@@ -82,7 +47,7 @@ function ArrayFieldDescription(_ref2) {
   }
 
   var id = "".concat(idSchema.$id, "__description");
-  return _react["default"].createElement(DescriptionField, {
+  return React.createElement(DescriptionField, {
     id: id,
     description: description
   });
@@ -96,36 +61,39 @@ function DefaultArrayItem(props) {
     paddingRight: 6,
     fontWeight: "bold"
   };
-  return _react["default"].createElement("div", {
+  return React.createElement("div", {
     key: props.key,
     className: props.className
-  }, _react["default"].createElement("div", {
+  }, React.createElement("div", {
     className: props.hasToolbar ? "col-xs-9" : "col-xs-12"
-  }, props.children), props.hasToolbar && _react["default"].createElement("div", {
+  }, props.children), props.hasToolbar && React.createElement("div", {
     className: "col-xs-3 array-item-toolbox"
-  }, _react["default"].createElement("div", {
+  }, React.createElement("div", {
     className: "btn-group",
     style: {
       display: "flex",
       justifyContent: "space-around"
     }
-  }, (props.hasMoveUp || props.hasMoveDown) && _react["default"].createElement(_IconButton["default"], {
+  }, (props.hasMoveUp || props.hasMoveDown) && React.createElement(IconButton, {
     icon: "arrow-up",
+    "aria-label": "Move up",
     className: "array-item-move-up",
     tabIndex: "-1",
     style: btnStyle,
     disabled: props.disabled || props.readonly || !props.hasMoveUp,
     onClick: props.onReorderClick(props.index, props.index - 1)
-  }), (props.hasMoveUp || props.hasMoveDown) && _react["default"].createElement(_IconButton["default"], {
+  }), (props.hasMoveUp || props.hasMoveDown) && React.createElement(IconButton, {
     icon: "arrow-down",
     className: "array-item-move-down",
+    "aria-label": "Move down",
     tabIndex: "-1",
     style: btnStyle,
     disabled: props.disabled || props.readonly || !props.hasMoveDown,
     onClick: props.onReorderClick(props.index, props.index + 1)
-  }), props.hasRemove && _react["default"].createElement(_IconButton["default"], {
+  }), props.hasRemove && React.createElement(IconButton, {
     type: "danger",
     icon: "remove",
+    "aria-label": "Remove",
     className: "array-item-remove",
     tabIndex: "-1",
     style: btnStyle,
@@ -135,22 +103,22 @@ function DefaultArrayItem(props) {
 }
 
 function DefaultFixedArrayFieldTemplate(props) {
-  return _react["default"].createElement("fieldset", {
+  return React.createElement("fieldset", {
     className: props.className,
     id: props.idSchema.$id
-  }, _react["default"].createElement(ArrayFieldTitle, {
+  }, React.createElement(ArrayFieldTitle, {
     key: "array-field-title-".concat(props.idSchema.$id),
     TitleField: props.TitleField,
     idSchema: props.idSchema,
     title: props.uiSchema["ui:title"] || props.title,
     required: props.required
-  }), (props.uiSchema["ui:description"] || props.schema.description) && _react["default"].createElement("div", {
+  }), (props.uiSchema["ui:description"] || props.schema.description) && React.createElement("div", {
     className: "field-description",
     key: "field-description-".concat(props.idSchema.$id)
-  }, props.uiSchema["ui:description"] || props.schema.description), _react["default"].createElement("div", {
+  }, props.uiSchema["ui:description"] || props.schema.description), React.createElement("div", {
     className: "row array-item-list",
     key: "array-item-list-".concat(props.idSchema.$id)
-  }, props.items && props.items.map(DefaultArrayItem)), props.canAdd && _react["default"].createElement(_AddButton["default"], {
+  }, props.items && props.items.map(DefaultArrayItem)), props.canAdd && React.createElement(AddButton, {
     className: "array-item-add",
     onClick: props.onAddClick,
     disabled: props.disabled || props.readonly
@@ -158,26 +126,26 @@ function DefaultFixedArrayFieldTemplate(props) {
 }
 
 function DefaultNormalArrayFieldTemplate(props) {
-  return _react["default"].createElement("fieldset", {
+  return React.createElement("fieldset", {
     className: props.className,
     id: props.idSchema.$id
-  }, _react["default"].createElement(ArrayFieldTitle, {
+  }, React.createElement(ArrayFieldTitle, {
     key: "array-field-title-".concat(props.idSchema.$id),
     TitleField: props.TitleField,
     idSchema: props.idSchema,
     title: props.uiSchema["ui:title"] || props.title,
     required: props.required
-  }), (props.uiSchema["ui:description"] || props.schema.description) && _react["default"].createElement(ArrayFieldDescription, {
+  }), (props.uiSchema["ui:description"] || props.schema.description) && React.createElement(ArrayFieldDescription, {
     key: "array-field-description-".concat(props.idSchema.$id),
     DescriptionField: props.DescriptionField,
     idSchema: props.idSchema,
     description: props.uiSchema["ui:description"] || props.schema.description
-  }), _react["default"].createElement("div", {
+  }), React.createElement("div", {
     className: "row array-item-list",
     key: "array-item-list-".concat(props.idSchema.$id)
   }, props.items && props.items.map(function (p) {
     return DefaultArrayItem(p);
-  })), props.canAdd && _react["default"].createElement(_AddButton["default"], {
+  })), props.canAdd && React.createElement(AddButton, {
     className: "array-item-add",
     onClick: props.onAddClick,
     disabled: props.disabled || props.readonly
@@ -185,11 +153,11 @@ function DefaultNormalArrayFieldTemplate(props) {
 }
 
 function generateRowId() {
-  return _shortid["default"].generate();
+  return shortid.generate();
 }
 
 function generateKeyedFormData(formData) {
-  return !(0, _isArray["default"])(formData) ? [] : formData.map(function (item) {
+  return !_Array$isArray(formData) ? [] : formData.map(function (item) {
     return {
       key: generateRowId(),
       item: item
@@ -206,35 +174,41 @@ function keyedToPlainFormData(keyedFormData) {
 var ArrayField =
 /*#__PURE__*/
 function (_Component) {
-  (0, _inherits2["default"])(ArrayField, _Component);
+  _inherits(ArrayField, _Component);
 
   function ArrayField(props) {
     var _this;
 
-    (0, _classCallCheck2["default"])(this, ArrayField);
-    _this = (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(ArrayField).call(this, props));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "_getNewFormDataRow", function () {
+    _classCallCheck(this, ArrayField);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ArrayField).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "_getNewFormDataRow", function () {
       var _this$props = _this.props,
           schema = _this$props.schema,
           _this$props$registry = _this$props.registry,
-          registry = _this$props$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props$registry;
-      var definitions = registry.definitions;
+          registry = _this$props$registry === void 0 ? getDefaultRegistry() : _this$props$registry;
+      var rootSchema = registry.rootSchema;
       var itemSchema = schema.items;
 
-      if ((0, _utils.isFixedItems)(schema) && (0, _utils.allowAdditionalItems)(schema)) {
+      if (isFixedItems(schema) && allowAdditionalItems(schema)) {
         itemSchema = schema.additionalItems;
       }
 
-      return (0, _utils.getDefaultFormState)(itemSchema, undefined, definitions);
+      return getDefaultFormState(itemSchema, undefined, rootSchema);
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onAddClick", function (event) {
-      event.preventDefault();
+
+    _defineProperty(_assertThisInitialized(_this), "onAddClick", function (event) {
+      if (event) {
+        event.preventDefault();
+      }
+
       var onChange = _this.props.onChange;
       var newKeyedFormDataRow = {
         key: generateRowId(),
         item: _this._getNewFormDataRow()
       };
-      var newKeyedFormData = [].concat((0, _toConsumableArray2["default"])(_this.state.keyedFormData), [newKeyedFormDataRow]);
+      var newKeyedFormData = [].concat(_toConsumableArray(_this.state.keyedFormData), [newKeyedFormDataRow]);
 
       _this.setState({
         keyedFormData: newKeyedFormData,
@@ -243,7 +217,8 @@ function (_Component) {
         return onChange(keyedToPlainFormData(newKeyedFormData));
       });
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onAddIndexClick", function (index) {
+
+    _defineProperty(_assertThisInitialized(_this), "onAddIndexClick", function (index) {
       return function (event) {
         if (event) {
           event.preventDefault();
@@ -254,7 +229,9 @@ function (_Component) {
           key: generateRowId(),
           item: _this._getNewFormDataRow()
         };
-        var newKeyedFormData = (0, _toConsumableArray2["default"])(_this.state.keyedFormData);
+
+        var newKeyedFormData = _toConsumableArray(_this.state.keyedFormData);
+
         newKeyedFormData.splice(index, 0, newKeyedFormDataRow);
 
         _this.setState({
@@ -265,7 +242,8 @@ function (_Component) {
         });
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onDropIndexClick", function (index) {
+
+    _defineProperty(_assertThisInitialized(_this), "onDropIndexClick", function (index) {
       return function (event) {
         if (event) {
           event.preventDefault();
@@ -281,7 +259,7 @@ function (_Component) {
           var errorSchema = _this.props.errorSchema;
 
           for (var i in errorSchema) {
-            i = (0, _parseInt2["default"])(i);
+            i = _parseInt(i);
 
             if (i < index) {
               newErrorSchema[i] = errorSchema[i];
@@ -303,7 +281,8 @@ function (_Component) {
         });
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onReorderClick", function (index, newIndex) {
+
+    _defineProperty(_assertThisInitialized(_this), "onReorderClick", function (index, newIndex) {
       return function (event) {
         if (event) {
           event.preventDefault();
@@ -351,7 +330,8 @@ function (_Component) {
         });
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onChangeForIndex", function (index) {
+
+    _defineProperty(_assertThisInitialized(_this), "onChangeForIndex", function (index) {
       return function (value, errorSchema) {
         var _this$props2 = _this.props,
             formData = _this$props2.formData,
@@ -362,12 +342,14 @@ function (_Component) {
           var jsonValue = typeof value === "undefined" ? null : value;
           return index === i ? jsonValue : item;
         });
-        onChange(newFormData, errorSchema && _this.props.errorSchema && (0, _objectSpread3["default"])({}, _this.props.errorSchema, (0, _defineProperty2["default"])({}, index, errorSchema)));
+        onChange(newFormData, errorSchema && _this.props.errorSchema && _objectSpread({}, _this.props.errorSchema, _defineProperty({}, index, errorSchema)));
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onSelectChange", function (value) {
+
+    _defineProperty(_assertThisInitialized(_this), "onSelectChange", function (value) {
       _this.props.onChange(value);
     });
+
     var _formData = props.formData;
 
     var _keyedFormData = generateKeyedFormData(_formData);
@@ -379,13 +361,13 @@ function (_Component) {
     return _this;
   }
 
-  (0, _createClass2["default"])(ArrayField, [{
+  _createClass(ArrayField, [{
     key: "isItemRequired",
     value: function isItemRequired(itemSchema) {
-      if ((0, _isArray["default"])(itemSchema.type)) {
+      if (_Array$isArray(itemSchema.type)) {
         // While we don't yet support composite/nullable jsonschema types, it's
         // future-proof to check for requirement against these.
-        return !(0, _includes["default"])(itemSchema.type, "null");
+        return !includes(itemSchema.type, "null");
       } // All non-null array item types are inherently required by design
 
 
@@ -398,7 +380,7 @@ function (_Component) {
           schema = _this$props3.schema,
           uiSchema = _this$props3.uiSchema;
 
-      var _getUiOptions = (0, _utils.getUiOptions)(uiSchema),
+      var _getUiOptions = getUiOptions(uiSchema),
           addable = _getUiOptions.addable;
 
       if (addable !== false) {
@@ -421,26 +403,28 @@ function (_Component) {
           uiSchema = _this$props4.uiSchema,
           idSchema = _this$props4.idSchema,
           _this$props4$registry = _this$props4.registry,
-          registry = _this$props4$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props4$registry;
-      var definitions = registry.definitions;
+          registry = _this$props4$registry === void 0 ? getDefaultRegistry() : _this$props4$registry;
+      var rootSchema = registry.rootSchema;
 
       if (!schema.hasOwnProperty("items")) {
-        return _react["default"].createElement(_UnsupportedField["default"], {
+        var fields = registry.fields;
+        var UnsupportedField = fields.UnsupportedField;
+        return React.createElement(UnsupportedField, {
           schema: schema,
           idSchema: idSchema,
           reason: "Missing items definition"
         });
       }
 
-      if ((0, _utils.isFixedItems)(schema)) {
+      if (isFixedItems(schema)) {
         return this.renderFixedArray();
       }
 
-      if ((0, _utils.isFilesArray)(schema, uiSchema, definitions)) {
+      if (isFilesArray(schema, uiSchema, rootSchema)) {
         return this.renderFiles();
       }
 
-      if ((0, _utils.isMultiSelect)(schema, definitions)) {
+      if (isMultiSelect(schema, rootSchema)) {
         return this.renderMultiSelect();
       }
 
@@ -454,7 +438,6 @@ function (_Component) {
       var _this$props5 = this.props,
           schema = _this$props5.schema,
           uiSchema = _this$props5.uiSchema,
-          formData = _this$props5.formData,
           errorSchema = _this$props5.errorSchema,
           idSchema = _this$props5.idSchema,
           name = _this$props5.name,
@@ -463,28 +446,29 @@ function (_Component) {
           readonly = _this$props5.readonly,
           autofocus = _this$props5.autofocus,
           _this$props5$registry = _this$props5.registry,
-          registry = _this$props5$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props5$registry,
+          registry = _this$props5$registry === void 0 ? getDefaultRegistry() : _this$props5$registry,
           onBlur = _this$props5.onBlur,
           onFocus = _this$props5.onFocus,
           idPrefix = _this$props5.idPrefix,
           rawErrors = _this$props5.rawErrors;
       var title = schema.title === undefined ? name : schema.title;
       var ArrayFieldTemplate = registry.ArrayFieldTemplate,
-          definitions = registry.definitions,
+          rootSchema = registry.rootSchema,
           fields = registry.fields,
           formContext = registry.formContext;
       var TitleField = fields.TitleField,
           DescriptionField = fields.DescriptionField;
-      var itemsSchema = (0, _utils.retrieveSchema)(schema.items, definitions);
+      var itemsSchema = retrieveSchema(schema.items, rootSchema);
+      var formData = keyedToPlainFormData(this.state.keyedFormData);
       var arrayProps = {
         canAdd: this.canAddItem(formData),
         items: this.state.keyedFormData.map(function (keyedItem, index) {
           var key = keyedItem.key,
               item = keyedItem.item;
-          var itemSchema = (0, _utils.retrieveSchema)(schema.items, definitions, item);
+          var itemSchema = retrieveSchema(schema.items, rootSchema, item);
           var itemErrorSchema = errorSchema ? errorSchema[index] : undefined;
           var itemIdPrefix = idSchema.$id + "_" + index;
-          var itemIdSchema = (0, _utils.toIdSchema)(itemSchema, itemIdPrefix, definitions, item, idPrefix);
+          var itemIdSchema = toIdSchema(itemSchema, itemIdPrefix, rootSchema, item, idPrefix);
           return _this2.renderArrayFieldItem({
             key: key,
             index: index,
@@ -518,7 +502,7 @@ function (_Component) {
       }; // Check if a custom render function was passed in
 
       var Component = uiSchema["ui:ArrayFieldTemplate"] || ArrayFieldTemplate || DefaultNormalArrayFieldTemplate;
-      return _react["default"].createElement(Component, arrayProps);
+      return React.createElement(Component, arrayProps);
     }
   }, {
     key: "renderMultiSelect",
@@ -537,24 +521,24 @@ function (_Component) {
           onBlur = _this$props6.onBlur,
           onFocus = _this$props6.onFocus,
           _this$props6$registry = _this$props6.registry,
-          registry = _this$props6$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props6$registry,
+          registry = _this$props6$registry === void 0 ? getDefaultRegistry() : _this$props6$registry,
           rawErrors = _this$props6.rawErrors;
       var items = this.props.formData;
       var widgets = registry.widgets,
-          definitions = registry.definitions,
+          rootSchema = registry.rootSchema,
           formContext = registry.formContext;
-      var itemsSchema = (0, _utils.retrieveSchema)(schema.items, definitions, formData);
-      var enumOptions = (0, _utils.optionsList)(itemsSchema);
+      var itemsSchema = retrieveSchema(schema.items, rootSchema, formData);
+      var enumOptions = optionsList(itemsSchema);
 
-      var _getUiOptions$enumOpt = (0, _objectSpread3["default"])({}, (0, _utils.getUiOptions)(uiSchema), {
+      var _getUiOptions$enumOpt = _objectSpread({}, getUiOptions(uiSchema), {
         enumOptions: enumOptions
       }),
           _getUiOptions$enumOpt2 = _getUiOptions$enumOpt.widget,
           widget = _getUiOptions$enumOpt2 === void 0 ? "select" : _getUiOptions$enumOpt2,
-          options = (0, _objectWithoutProperties2["default"])(_getUiOptions$enumOpt, ["widget"]);
+          options = _objectWithoutProperties(_getUiOptions$enumOpt, ["widget"]);
 
-      var Widget = (0, _utils.getWidget)(schema, widget, widgets);
-      return _react["default"].createElement(Widget, {
+      var Widget = getWidget(schema, widget, widgets);
+      return React.createElement(Widget, {
         id: idSchema && idSchema.$id,
         multiple: true,
         onChange: this.onSelectChange,
@@ -588,20 +572,20 @@ function (_Component) {
           onBlur = _this$props7.onBlur,
           onFocus = _this$props7.onFocus,
           _this$props7$registry = _this$props7.registry,
-          registry = _this$props7$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props7$registry,
+          registry = _this$props7$registry === void 0 ? getDefaultRegistry() : _this$props7$registry,
           rawErrors = _this$props7.rawErrors;
       var title = schema.title || name;
       var items = this.props.formData;
       var widgets = registry.widgets,
           formContext = registry.formContext;
 
-      var _getUiOptions2 = (0, _utils.getUiOptions)(uiSchema),
+      var _getUiOptions2 = getUiOptions(uiSchema),
           _getUiOptions2$widget = _getUiOptions2.widget,
           widget = _getUiOptions2$widget === void 0 ? "files" : _getUiOptions2$widget,
-          options = (0, _objectWithoutProperties2["default"])(_getUiOptions2, ["widget"]);
+          options = _objectWithoutProperties(_getUiOptions2, ["widget"]);
 
-      var Widget = (0, _utils.getWidget)(schema, widget, widgets);
-      return _react["default"].createElement(Widget, {
+      var Widget = getWidget(schema, widget, widgets);
+      return React.createElement(Widget, {
         options: options,
         id: idSchema && idSchema.$id,
         multiple: true,
@@ -636,21 +620,21 @@ function (_Component) {
           readonly = _this$props8.readonly,
           autofocus = _this$props8.autofocus,
           _this$props8$registry = _this$props8.registry,
-          registry = _this$props8$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props8$registry,
+          registry = _this$props8$registry === void 0 ? getDefaultRegistry() : _this$props8$registry,
           onBlur = _this$props8.onBlur,
           onFocus = _this$props8.onFocus,
           rawErrors = _this$props8.rawErrors;
       var title = schema.title || name;
       var items = this.props.formData;
       var ArrayFieldTemplate = registry.ArrayFieldTemplate,
-          definitions = registry.definitions,
+          rootSchema = registry.rootSchema,
           fields = registry.fields,
           formContext = registry.formContext;
       var TitleField = fields.TitleField;
       var itemSchemas = schema.items.map(function (item, index) {
-        return (0, _utils.retrieveSchema)(item, definitions, formData[index]);
+        return retrieveSchema(item, rootSchema, formData[index]);
       });
-      var additionalSchema = (0, _utils.allowAdditionalItems)(schema) ? (0, _utils.retrieveSchema)(schema.additionalItems, definitions, formData) : null;
+      var additionalSchema = allowAdditionalItems(schema) ? retrieveSchema(schema.additionalItems, rootSchema, formData) : null;
 
       if (!items || items.length < itemSchemas.length) {
         // to make sure at least all fixed items are generated
@@ -669,10 +653,10 @@ function (_Component) {
           var key = keyedItem.key,
               item = keyedItem.item;
           var additional = index >= itemSchemas.length;
-          var itemSchema = additional ? (0, _utils.retrieveSchema)(schema.additionalItems, definitions, item) : itemSchemas[index];
+          var itemSchema = additional ? retrieveSchema(schema.additionalItems, rootSchema, item) : itemSchemas[index];
           var itemIdPrefix = idSchema.$id + "_" + index;
-          var itemIdSchema = (0, _utils.toIdSchema)(itemSchema, itemIdPrefix, definitions, item, idPrefix);
-          var itemUiSchema = additional ? uiSchema.additionalItems || {} : (0, _isArray["default"])(uiSchema.items) ? uiSchema.items[index] : uiSchema.items || {};
+          var itemIdSchema = toIdSchema(itemSchema, itemIdPrefix, rootSchema, item, idPrefix);
+          var itemUiSchema = additional ? uiSchema.additionalItems || {} : _Array$isArray(uiSchema.items) ? uiSchema.items[index] : uiSchema.items || {};
           var itemErrorSchema = errorSchema ? errorSchema[index] : undefined;
           return _this3.renderArrayFieldItem({
             key: key,
@@ -702,7 +686,7 @@ function (_Component) {
       }; // Check if a custom template template was passed in
 
       var Template = uiSchema["ui:ArrayFieldTemplate"] || ArrayFieldTemplate || DefaultFixedArrayFieldTemplate;
-      return _react["default"].createElement(Template, arrayProps);
+      return React.createElement(Template, arrayProps);
     }
   }, {
     key: "renderArrayFieldItem",
@@ -729,10 +713,10 @@ function (_Component) {
           readonly = _this$props9.readonly,
           uiSchema = _this$props9.uiSchema,
           _this$props9$registry = _this$props9.registry,
-          registry = _this$props9$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props9$registry;
+          registry = _this$props9$registry === void 0 ? getDefaultRegistry() : _this$props9$registry;
       var SchemaField = registry.fields.SchemaField;
 
-      var _orderable$removable$ = (0, _objectSpread3["default"])({
+      var _orderable$removable$ = _objectSpread({
         orderable: true,
         removable: true
       }, uiSchema["ui:options"]),
@@ -744,11 +728,11 @@ function (_Component) {
         moveDown: orderable && canMoveDown,
         remove: removable && canRemove
       };
-      has.toolbar = (0, _keys["default"])(has).some(function (key) {
+      has.toolbar = _Object$keys(has).some(function (key) {
         return has[key];
       });
       return {
-        children: _react["default"].createElement(SchemaField, {
+        children: React.createElement(SchemaField, {
           index: index,
           schema: itemSchema,
           uiSchema: itemUiSchema,
@@ -808,10 +792,11 @@ function (_Component) {
       };
     }
   }]);
-  return ArrayField;
-}(_react.Component);
 
-(0, _defineProperty2["default"])(ArrayField, "defaultProps", {
+  return ArrayField;
+}(Component);
+
+_defineProperty(ArrayField, "defaultProps", {
   uiSchema: {},
   formData: [],
   idSchema: {},
@@ -825,5 +810,4 @@ if (process.env.NODE_ENV !== "production") {
   ArrayField.propTypes = types.fieldProps;
 }
 
-var _default = ArrayField;
-exports["default"] = _default;
+export default ArrayField;

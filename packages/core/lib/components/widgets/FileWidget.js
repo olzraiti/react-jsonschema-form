@@ -1,40 +1,15 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _isArray = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/array/is-array"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
-
-var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _utils = require("../../utils");
+import _Array$isArray from "@babel/runtime-corejs2/core-js/array/is-array";
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _assertThisInitialized from "@babel/runtime-corejs2/helpers/esm/assertThisInitialized";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
+import _Promise from "@babel/runtime-corejs2/core-js/promise";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { dataURItoBlob, shouldRender } from "../../utils";
 
 function addNameToDataURL(dataURL, name) {
   return dataURL.replace(";base64", ";name=".concat(encodeURIComponent(name), ";base64"));
@@ -44,7 +19,7 @@ function processFile(file) {
   var name = file.name,
       size = file.size,
       type = file.type;
-  return new _promise["default"](function (resolve, reject) {
+  return new _Promise(function (resolve, reject) {
     var reader = new window.FileReader();
     reader.onerror = reject;
 
@@ -62,7 +37,7 @@ function processFile(file) {
 }
 
 function processFiles(files) {
-  return _promise["default"].all([].map.call(files, processFile));
+  return _Promise.all([].map.call(files, processFile));
 }
 
 function FilesInfo(props) {
@@ -72,15 +47,15 @@ function FilesInfo(props) {
     return null;
   }
 
-  return _react["default"].createElement("ul", {
+  return React.createElement("ul", {
     className: "file-info"
   }, filesInfo.map(function (fileInfo, key) {
     var name = fileInfo.name,
         size = fileInfo.size,
         type = fileInfo.type;
-    return _react["default"].createElement("li", {
+    return React.createElement("li", {
       key: key
-    }, _react["default"].createElement("strong", null, name), " (", type, ", ", size, " bytes)");
+    }, React.createElement("strong", null, name), " (", type, ", ", size, " bytes)");
   }));
 }
 
@@ -88,7 +63,7 @@ function extractFileInfo(dataURLs) {
   return dataURLs.filter(function (dataURL) {
     return typeof dataURL !== "undefined";
   }).map(function (dataURL) {
-    var _dataURItoBlob = (0, _utils.dataURItoBlob)(dataURL),
+    var _dataURItoBlob = dataURItoBlob(dataURL),
         blob = _dataURItoBlob.blob,
         name = _dataURItoBlob.name;
 
@@ -103,14 +78,16 @@ function extractFileInfo(dataURLs) {
 var FileWidget =
 /*#__PURE__*/
 function (_Component) {
-  (0, _inherits2["default"])(FileWidget, _Component);
+  _inherits(FileWidget, _Component);
 
   function FileWidget(props) {
     var _this;
 
-    (0, _classCallCheck2["default"])(this, FileWidget);
-    _this = (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(FileWidget).call(this, props));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onChange", function (event) {
+    _classCallCheck(this, FileWidget);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(FileWidget).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "onChange", function (event) {
       var _this$props = _this.props,
           multiple = _this$props.multiple,
           onChange = _this$props.onChange;
@@ -131,8 +108,9 @@ function (_Component) {
         });
       });
     });
+
     var value = props.value;
-    var values = (0, _isArray["default"])(value) ? value : [value];
+    var values = _Array$isArray(value) ? value : [value];
     _this.state = {
       values: values,
       filesInfo: extractFileInfo(values)
@@ -140,10 +118,10 @@ function (_Component) {
     return _this;
   }
 
-  (0, _createClass2["default"])(FileWidget, [{
+  _createClass(FileWidget, [{
     key: "shouldComponentUpdate",
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return (0, _utils.shouldRender)(this, nextProps, nextState);
+      return shouldRender(this, nextProps, nextState);
     }
   }, {
     key: "render",
@@ -158,7 +136,7 @@ function (_Component) {
           autofocus = _this$props2.autofocus,
           options = _this$props2.options;
       var filesInfo = this.state.filesInfo;
-      return _react["default"].createElement("div", null, _react["default"].createElement("p", null, _react["default"].createElement("input", {
+      return React.createElement("div", null, React.createElement("p", null, React.createElement("input", {
         ref: function ref(_ref) {
           return _this2.inputRef = _ref;
         },
@@ -170,13 +148,14 @@ function (_Component) {
         autoFocus: autofocus,
         multiple: multiple,
         accept: options.accept
-      })), _react["default"].createElement(FilesInfo, {
+      })), React.createElement(FilesInfo, {
         filesInfo: filesInfo
       }));
     }
   }]);
+
   return FileWidget;
-}(_react.Component);
+}(Component);
 
 FileWidget.defaultProps = {
   autofocus: false
@@ -184,11 +163,10 @@ FileWidget.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   FileWidget.propTypes = {
-    multiple: _propTypes["default"].bool,
-    value: _propTypes["default"].oneOfType([_propTypes["default"].string, _propTypes["default"].arrayOf(_propTypes["default"].string)]),
-    autofocus: _propTypes["default"].bool
+    multiple: PropTypes.bool,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    autofocus: PropTypes.bool
   };
 }
 
-var _default = FileWidget;
-exports["default"] = _default;
+export default FileWidget;

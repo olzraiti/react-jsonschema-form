@@ -1,45 +1,19 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectWithoutProperties"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var types = _interopRequireWildcard(require("../../types"));
-
-var _utils = require("../../utils");
-
-// Matches a string that ends in a . character, optionally followed by a sequence of
+import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
+import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _assertThisInitialized from "@babel/runtime-corejs2/helpers/esm/assertThisInitialized";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
+import React from "react";
+import * as types from "../../types";
+import { asNumber } from "../../utils"; // Matches a string that ends in a . character, optionally followed by a sequence of
 // digits followed by any number of 0 characters up until the end of the line.
 // Ensuring that there is at least one prefixed character is important so that
 // you don't incorrectly match against "0".
+
 var trailingCharMatcherWithPrefix = /\.([0-9]*0)*$/; // This is used for trimming the trailing 0 and . characters without affecting
 // the rest of the string. Its possible to use one RegEx with groups for this
 // functionality, but it is fairly complex compared to simply defining two
@@ -67,14 +41,16 @@ var trailingCharMatcher = /[0.]0*$/;
 var NumberField =
 /*#__PURE__*/
 function (_React$Component) {
-  (0, _inherits2["default"])(NumberField, _React$Component);
+  _inherits(NumberField, _React$Component);
 
   function NumberField(props) {
     var _this;
 
-    (0, _classCallCheck2["default"])(this, NumberField);
-    _this = (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(NumberField).call(this, props));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "handleChange", function (value) {
+    _classCallCheck(this, NumberField);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(NumberField).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this), "handleChange", function (value) {
       // Cache the original value in component state
       _this.setState({
         lastValue: value
@@ -89,23 +65,26 @@ function (_React$Component) {
       // trailing decimal point or multiple zeroes, strip the trailing values
 
 
-      var processed = typeof value === "string" && value.match(trailingCharMatcherWithPrefix) ? (0, _utils.asNumber)(value.replace(trailingCharMatcher, "")) : (0, _utils.asNumber)(value);
+      var processed = typeof value === "string" && value.match(trailingCharMatcherWithPrefix) ? asNumber(value.replace(trailingCharMatcher, "")) : asNumber(value);
 
       _this.props.onChange(processed);
     });
+
     _this.state = {
       lastValue: props.value
     };
     return _this;
   }
 
-  (0, _createClass2["default"])(NumberField, [{
+  _createClass(NumberField, [{
     key: "render",
     value: function render() {
       var StringField = this.props.registry.fields.StringField;
+
       var _this$props = this.props,
           formData = _this$props.formData,
-          props = (0, _objectWithoutProperties2["default"])(_this$props, ["formData"]);
+          props = _objectWithoutProperties(_this$props, ["formData"]);
+
       var lastValue = this.state.lastValue;
       var value = formData;
 
@@ -121,14 +100,15 @@ function (_React$Component) {
         }
       }
 
-      return _react["default"].createElement(StringField, (0, _extends2["default"])({}, props, {
+      return React.createElement(StringField, _extends({}, props, {
         formData: value,
         onChange: this.handleChange
       }));
     }
   }]);
+
   return NumberField;
-}(_react["default"].Component);
+}(React.Component);
 
 if (process.env.NODE_ENV !== "production") {
   NumberField.propTypes = types.fieldProps;
@@ -137,5 +117,4 @@ if (process.env.NODE_ENV !== "production") {
 NumberField.defaultProps = {
   uiSchema: {}
 };
-var _default = NumberField;
-exports["default"] = _default;
+export default NumberField;

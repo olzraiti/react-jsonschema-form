@@ -1,18 +1,5 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
+import React from "react";
+import PropTypes from "prop-types";
 
 function TextareaWidget(props) {
   var id = props.id,
@@ -32,10 +19,10 @@ function TextareaWidget(props) {
     return onChange(value === "" ? options.emptyValue : value);
   };
 
-  return _react["default"].createElement("textarea", {
+  return React.createElement("textarea", {
     id: id,
     className: "form-control",
-    value: typeof value === "undefined" ? "" : value,
+    value: value ? value : "",
     placeholder: placeholder,
     required: required,
     disabled: disabled,
@@ -59,22 +46,21 @@ TextareaWidget.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   TextareaWidget.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    id: _propTypes["default"].string.isRequired,
-    placeholder: _propTypes["default"].string,
-    options: _propTypes["default"].shape({
-      rows: _propTypes["default"].number
+    schema: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    options: PropTypes.shape({
+      rows: PropTypes.number
     }),
-    value: _propTypes["default"].string,
-    required: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func,
-    onBlur: _propTypes["default"].func,
-    onFocus: _propTypes["default"].func
+    value: PropTypes.string,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func
   };
 }
 
-var _default = TextareaWidget;
-exports["default"] = _default;
+export default TextareaWidget;

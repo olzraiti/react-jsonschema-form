@@ -1,18 +1,5 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
+import React from "react";
+import PropTypes from "prop-types";
 
 function selectValue(value, selected, all) {
   var at = all.indexOf(value);
@@ -41,15 +28,14 @@ function CheckboxesWidget(props) {
   var enumOptions = options.enumOptions,
       enumDisabled = options.enumDisabled,
       inline = options.inline;
-  return _react["default"].createElement("div", {
+  return React.createElement("div", {
     className: "checkboxes",
     id: id
   }, enumOptions.map(function (option, index) {
     var checked = value.indexOf(option.value) !== -1;
     var itemDisabled = enumDisabled && enumDisabled.indexOf(option.value) != -1;
     var disabledCls = disabled || itemDisabled || readonly ? "disabled" : "";
-
-    var checkbox = _react["default"].createElement("span", null, _react["default"].createElement("input", {
+    var checkbox = React.createElement("span", null, React.createElement("input", {
       type: "checkbox",
       id: "".concat(id, "_").concat(index),
       checked: checked,
@@ -67,15 +53,14 @@ function CheckboxesWidget(props) {
           _onChange(deselectValue(option.value, value));
         }
       }
-    }), _react["default"].createElement("span", null, option.label));
-
-    return inline ? _react["default"].createElement("label", {
+    }), React.createElement("span", null, option.label));
+    return inline ? React.createElement("label", {
       key: index,
       className: "checkbox-inline ".concat(disabledCls)
-    }, checkbox) : _react["default"].createElement("div", {
+    }, checkbox) : React.createElement("div", {
       key: index,
       className: "checkbox ".concat(disabledCls)
-    }, _react["default"].createElement("label", null, checkbox));
+    }, React.createElement("label", null, checkbox));
   }));
 }
 
@@ -88,21 +73,20 @@ CheckboxesWidget.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   CheckboxesWidget.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    id: _propTypes["default"].string.isRequired,
-    options: _propTypes["default"].shape({
-      enumOptions: _propTypes["default"].array,
-      inline: _propTypes["default"].bool
+    schema: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    options: PropTypes.shape({
+      enumOptions: PropTypes.array,
+      inline: PropTypes.bool
     }).isRequired,
-    value: _propTypes["default"].any,
-    required: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    multiple: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func
+    value: PropTypes.any,
+    required: PropTypes.bool,
+    readonly: PropTypes.bool,
+    disabled: PropTypes.bool,
+    multiple: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func
   };
 }
 
-var _default = CheckboxesWidget;
-exports["default"] = _default;
+export default CheckboxesWidget;

@@ -1,35 +1,17 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _set = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/set"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectWithoutProperties"));
-
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
+import _Set from "@babel/runtime-corejs2/core-js/set";
+import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray";
+import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
+import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
+import _JSON$stringify from "@babel/runtime-corejs2/core-js/json/stringify";
+import React from "react";
+import PropTypes from "prop-types";
 
 function BaseInput(props) {
   // Note: since React 15.2.0 we can't forward unknown element attributes, so we
   // exclude the "options" and "schema" ones here.
   if (!props.id) {
     console.log("No id for", props);
-    throw new Error("no id for props ".concat((0, _stringify["default"])(props)));
+    throw new Error("no id for props ".concat(_JSON$stringify(props)));
   }
 
   var value = props.value,
@@ -40,10 +22,12 @@ function BaseInput(props) {
       onFocus = props.onFocus,
       options = props.options,
       schema = props.schema,
+      uiSchema = props.uiSchema,
       formContext = props.formContext,
       registry = props.registry,
       rawErrors = props.rawErrors,
-      inputProps = (0, _objectWithoutProperties2["default"])(props, ["value", "readonly", "disabled", "autofocus", "onBlur", "onFocus", "options", "schema", "formContext", "registry", "rawErrors"]); // If options.inputType is set use that as the input type
+      inputProps = _objectWithoutProperties(props, ["value", "readonly", "disabled", "autofocus", "onBlur", "onFocus", "options", "schema", "uiSchema", "formContext", "registry", "rawErrors"]); // If options.inputType is set use that as the input type
+
 
   if (options.inputType) {
     inputProps.type = options.inputType;
@@ -62,6 +46,10 @@ function BaseInput(props) {
     } else {
       inputProps.type = "text";
     }
+  }
+
+  if (options.autocomplete) {
+    inputProps.autoComplete = options.autocomplete;
   } // If multipleOf is defined, use this as the step value. This mainly improves
   // the experience for keyboard users (who can use the up/down KB arrows).
 
@@ -83,7 +71,8 @@ function BaseInput(props) {
     return props.onChange(value === "" ? options.emptyValue : value);
   };
 
-  return [_react["default"].createElement("input", (0, _extends2["default"])({
+  return [React.createElement("input", _extends({
+    key: inputProps.id,
     className: "form-control",
     readOnly: readonly,
     disabled: disabled,
@@ -98,10 +87,10 @@ function BaseInput(props) {
     onFocus: onFocus && function (event) {
       return onFocus(inputProps.id, event.target.value);
     }
-  })), schema.examples ? _react["default"].createElement("datalist", {
+  })), schema.examples ? React.createElement("datalist", {
     id: "examples_".concat(inputProps.id)
-  }, (0, _toConsumableArray2["default"])(new _set["default"](schema.examples.concat(schema["default"] ? [schema["default"]] : []))).map(function (example) {
-    return _react["default"].createElement("option", {
+  }, _toConsumableArray(new _Set(schema.examples.concat(schema["default"] ? [schema["default"]] : []))).map(function (example) {
+    return React.createElement("option", {
       key: example,
       value: example
     });
@@ -117,18 +106,17 @@ BaseInput.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   BaseInput.propTypes = {
-    id: _propTypes["default"].string.isRequired,
-    placeholder: _propTypes["default"].string,
-    value: _propTypes["default"].any,
-    required: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func,
-    onBlur: _propTypes["default"].func,
-    onFocus: _propTypes["default"].func
+    id: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    value: PropTypes.any,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func
   };
 }
 
-var _default = BaseInput;
-exports["default"] = _default;
+export default BaseInput;

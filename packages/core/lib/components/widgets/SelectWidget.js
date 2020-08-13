@@ -1,24 +1,8 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _set = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/set"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _utils = require("../../utils");
-
-var nums = new _set["default"](["number", "integer"]);
+import _Set from "@babel/runtime-corejs2/core-js/set";
+import React from "react";
+import PropTypes from "prop-types";
+import { asNumber, guessType } from "../../utils";
+var nums = new _Set(["number", "integer"]);
 /**
  * This is a silly limitation in the DOM where option change event values are
  * always retrieved as strings.
@@ -32,22 +16,22 @@ function processValue(schema, value) {
   if (value === "") {
     return undefined;
   } else if (type === "array" && items && nums.has(items.type)) {
-    return value.map(_utils.asNumber);
+    return value.map(asNumber);
   } else if (type === "boolean") {
     return value === "true";
   } else if (type === "number") {
-    return (0, _utils.asNumber)(value);
+    return asNumber(value);
   } // If type is undefined, but an enum is present, try and infer the type from
   // the enum values
 
 
   if (schema["enum"]) {
     if (schema["enum"].every(function (x) {
-      return (0, _utils.guessType)(x) === "number";
+      return guessType(x) === "number";
     })) {
-      return (0, _utils.asNumber)(value);
+      return asNumber(value);
     } else if (schema["enum"].every(function (x) {
-      return (0, _utils.guessType)(x) === "boolean";
+      return guessType(x) === "boolean";
     })) {
       return value === "true";
     }
@@ -85,7 +69,7 @@ function SelectWidget(props) {
   var enumOptions = options.enumOptions,
       enumDisabled = options.enumDisabled;
   var emptyValue = multiple ? [] : "";
-  return _react["default"].createElement("select", {
+  return React.createElement("select", {
     id: id,
     multiple: multiple,
     className: "form-control",
@@ -106,13 +90,13 @@ function SelectWidget(props) {
 
       _onChange(processValue(schema, newValue));
     }
-  }, !multiple && schema["default"] === undefined && _react["default"].createElement("option", {
+  }, !multiple && schema["default"] === undefined && React.createElement("option", {
     value: ""
   }, placeholder), enumOptions.map(function (_ref, i) {
     var value = _ref.value,
         label = _ref.label;
     var disabled = enumDisabled && enumDisabled.indexOf(value) != -1;
-    return _react["default"].createElement("option", {
+    return React.createElement("option", {
       key: i,
       value: value,
       disabled: disabled
@@ -126,22 +110,21 @@ SelectWidget.defaultProps = {
 
 if (process.env.NODE_ENV !== "production") {
   SelectWidget.propTypes = {
-    schema: _propTypes["default"].object.isRequired,
-    id: _propTypes["default"].string.isRequired,
-    options: _propTypes["default"].shape({
-      enumOptions: _propTypes["default"].array
+    schema: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    options: PropTypes.shape({
+      enumOptions: PropTypes.array
     }).isRequired,
-    value: _propTypes["default"].any,
-    required: _propTypes["default"].bool,
-    disabled: _propTypes["default"].bool,
-    readonly: _propTypes["default"].bool,
-    multiple: _propTypes["default"].bool,
-    autofocus: _propTypes["default"].bool,
-    onChange: _propTypes["default"].func,
-    onBlur: _propTypes["default"].func,
-    onFocus: _propTypes["default"].func
+    value: PropTypes.any,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    readonly: PropTypes.bool,
+    multiple: PropTypes.bool,
+    autofocus: PropTypes.bool,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func
   };
 }
 
-var _default = SelectWidget;
-exports["default"] = _default;
+export default SelectWidget;

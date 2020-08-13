@@ -1,72 +1,40 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _AltDateWidget = _interopRequireDefault(require("./AltDateWidget"));
-
-var _AltDateTimeWidget = _interopRequireDefault(require("./AltDateTimeWidget"));
-
-var _BaseInput = _interopRequireDefault(require("./BaseInput"));
-
-var _CheckboxWidget = _interopRequireDefault(require("./CheckboxWidget"));
-
-var _CheckboxesWidget = _interopRequireDefault(require("./CheckboxesWidget"));
-
-var _ColorWidget = _interopRequireDefault(require("./ColorWidget"));
-
-var _DateWidget = _interopRequireDefault(require("./DateWidget"));
-
-var _DateTimeWidget = _interopRequireDefault(require("./DateTimeWidget"));
-
-var _EmailWidget = _interopRequireDefault(require("./EmailWidget"));
-
-var _FileWidget = _interopRequireDefault(require("./FileWidget"));
-
-var _HiddenWidget = _interopRequireDefault(require("./HiddenWidget"));
-
-var _PasswordWidget = _interopRequireDefault(require("./PasswordWidget"));
-
-var _RadioWidget = _interopRequireDefault(require("./RadioWidget"));
-
-var _RangeWidget = _interopRequireDefault(require("./RangeWidget"));
-
-var _SelectWidget = _interopRequireDefault(require("./SelectWidget"));
-
-var _TextareaWidget = _interopRequireDefault(require("./TextareaWidget"));
-
-var _TextWidget = _interopRequireDefault(require("./TextWidget"));
-
-var _URLWidget = _interopRequireDefault(require("./URLWidget"));
-
-var _UpDownWidget = _interopRequireDefault(require("./UpDownWidget"));
-
-var _default = {
-  BaseInput: _BaseInput["default"],
-  PasswordWidget: _PasswordWidget["default"],
-  RadioWidget: _RadioWidget["default"],
-  UpDownWidget: _UpDownWidget["default"],
-  RangeWidget: _RangeWidget["default"],
-  SelectWidget: _SelectWidget["default"],
-  TextWidget: _TextWidget["default"],
-  DateWidget: _DateWidget["default"],
-  DateTimeWidget: _DateTimeWidget["default"],
-  AltDateWidget: _AltDateWidget["default"],
-  AltDateTimeWidget: _AltDateTimeWidget["default"],
-  EmailWidget: _EmailWidget["default"],
-  URLWidget: _URLWidget["default"],
-  TextareaWidget: _TextareaWidget["default"],
-  HiddenWidget: _HiddenWidget["default"],
-  ColorWidget: _ColorWidget["default"],
-  FileWidget: _FileWidget["default"],
-  CheckboxWidget: _CheckboxWidget["default"],
-  CheckboxesWidget: _CheckboxesWidget["default"]
+import AltDateWidget from "./AltDateWidget";
+import AltDateTimeWidget from "./AltDateTimeWidget";
+import BaseInput from "./BaseInput";
+import CheckboxWidget from "./CheckboxWidget";
+import CheckboxesWidget from "./CheckboxesWidget";
+import ColorWidget from "./ColorWidget";
+import DateWidget from "./DateWidget";
+import DateTimeWidget from "./DateTimeWidget";
+import EmailWidget from "./EmailWidget";
+import FileWidget from "./FileWidget";
+import HiddenWidget from "./HiddenWidget";
+import PasswordWidget from "./PasswordWidget";
+import RadioWidget from "./RadioWidget";
+import RangeWidget from "./RangeWidget";
+import SelectWidget from "./SelectWidget";
+import TextareaWidget from "./TextareaWidget";
+import TextWidget from "./TextWidget";
+import URLWidget from "./URLWidget";
+import UpDownWidget from "./UpDownWidget";
+export default {
+  BaseInput: BaseInput,
+  PasswordWidget: PasswordWidget,
+  RadioWidget: RadioWidget,
+  UpDownWidget: UpDownWidget,
+  RangeWidget: RangeWidget,
+  SelectWidget: SelectWidget,
+  TextWidget: TextWidget,
+  DateWidget: DateWidget,
+  DateTimeWidget: DateTimeWidget,
+  AltDateWidget: AltDateWidget,
+  AltDateTimeWidget: AltDateTimeWidget,
+  EmailWidget: EmailWidget,
+  URLWidget: URLWidget,
+  TextareaWidget: TextareaWidget,
+  HiddenWidget: HiddenWidget,
+  ColorWidget: ColorWidget,
+  FileWidget: FileWidget,
+  CheckboxWidget: CheckboxWidget,
+  CheckboxesWidget: CheckboxesWidget
 };
-exports["default"] = _default;

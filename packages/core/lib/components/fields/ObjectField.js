@@ -1,52 +1,20 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime-corejs2/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs2/helpers/interopRequireDefault");
-
-var _Object$defineProperty = require("@babel/runtime-corejs2/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
-
-var _isArray = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/array/is-array"));
-
-var _assign = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/object/assign"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
-
-var _objectSpread5 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
-
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/object/keys"));
-
-var _AddButton = _interopRequireDefault(require("../AddButton"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var types = _interopRequireWildcard(require("../../types"));
-
-var _utils = require("../../utils");
+import _JSON$stringify from "@babel/runtime-corejs2/core-js/json/stringify";
+import _Array$isArray from "@babel/runtime-corejs2/core-js/array/is-array";
+import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray";
+import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
+import _objectSpread from "@babel/runtime-corejs2/helpers/esm/objectSpread";
+import _classCallCheck from "@babel/runtime-corejs2/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime-corejs2/helpers/esm/createClass";
+import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime-corejs2/helpers/esm/getPrototypeOf";
+import _assertThisInitialized from "@babel/runtime-corejs2/helpers/esm/assertThisInitialized";
+import _inherits from "@babel/runtime-corejs2/helpers/esm/inherits";
+import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
+import _Object$keys from "@babel/runtime-corejs2/core-js/object/keys";
+import AddButton from "../AddButton";
+import React, { Component } from "react";
+import * as types from "../../types";
+import { orderProperties, retrieveSchema, getDefaultRegistry, getUiOptions, ADDITIONAL_PROPERTY_FLAG } from "../../utils";
 
 function DefaultObjectFieldTemplate(props) {
   var canExpand = function canExpand() {
@@ -58,7 +26,7 @@ function DefaultObjectFieldTemplate(props) {
       return false;
     }
 
-    var _getUiOptions = (0, _utils.getUiOptions)(uiSchema),
+    var _getUiOptions = getUiOptions(uiSchema),
         expandable = _getUiOptions.expandable;
 
     if (expandable === false) {
@@ -68,7 +36,7 @@ function DefaultObjectFieldTemplate(props) {
 
 
     if (schema.maxProperties !== undefined) {
-      return (0, _keys["default"])(formData).length < schema.maxProperties;
+      return _Object$keys(formData).length < schema.maxProperties;
     }
 
     return true;
@@ -76,20 +44,20 @@ function DefaultObjectFieldTemplate(props) {
 
   var TitleField = props.TitleField,
       DescriptionField = props.DescriptionField;
-  return _react["default"].createElement("fieldset", {
+  return React.createElement("fieldset", {
     id: props.idSchema.$id
-  }, (props.uiSchema["ui:title"] || props.title) && _react["default"].createElement(TitleField, {
+  }, (props.uiSchema["ui:title"] || props.title) && React.createElement(TitleField, {
     id: "".concat(props.idSchema.$id, "__title"),
     title: props.title || props.uiSchema["ui:title"],
     required: props.required,
     formContext: props.formContext
-  }), props.description && _react["default"].createElement(DescriptionField, {
+  }), props.description && React.createElement(DescriptionField, {
     id: "".concat(props.idSchema.$id, "__description"),
     description: props.description,
     formContext: props.formContext
   }), props.properties.map(function (prop) {
     return prop.content;
-  }), canExpand() && _react["default"].createElement(_AddButton["default"], {
+  }), canExpand() && React.createElement(AddButton, {
     className: "object-property-expand",
     onClick: props.onAddClick(props.schema),
     disabled: props.disabled || props.readonly
@@ -99,25 +67,27 @@ function DefaultObjectFieldTemplate(props) {
 var ObjectField =
 /*#__PURE__*/
 function (_Component) {
-  (0, _inherits2["default"])(ObjectField, _Component);
+  _inherits(ObjectField, _Component);
 
   function ObjectField() {
     var _getPrototypeOf2;
 
     var _this;
 
-    (0, _classCallCheck2["default"])(this, ObjectField);
+    _classCallCheck(this, ObjectField);
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    _this = (0, _possibleConstructorReturn2["default"])(this, (_getPrototypeOf2 = (0, _getPrototypeOf3["default"])(ObjectField)).call.apply(_getPrototypeOf2, [this].concat(args)));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "state", {
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ObjectField)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
       wasPropertyKeyModified: false,
       additionalProperties: {}
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onPropertyChange", function (name) {
+
+    _defineProperty(_assertThisInitialized(_this), "onPropertyChange", function (name) {
       var addedByAdditionalProperties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       return function (value, errorSchema) {
         if (!value && addedByAdditionalProperties) {
@@ -131,23 +101,27 @@ function (_Component) {
           value = "";
         }
 
-        var newFormData = (0, _objectSpread5["default"])({}, _this.props.formData, (0, _defineProperty2["default"])({}, name, value));
+        var newFormData = _objectSpread({}, _this.props.formData, _defineProperty({}, name, value));
 
-        _this.props.onChange(newFormData, errorSchema && _this.props.errorSchema && (0, _objectSpread5["default"])({}, _this.props.errorSchema, (0, _defineProperty2["default"])({}, name, errorSchema)));
+        _this.props.onChange(newFormData, errorSchema && _this.props.errorSchema && _objectSpread({}, _this.props.errorSchema, _defineProperty({}, name, errorSchema)));
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onDropPropertyClick", function (key) {
+
+    _defineProperty(_assertThisInitialized(_this), "onDropPropertyClick", function (key) {
       return function (event) {
         event.preventDefault();
         var _this$props = _this.props,
             onChange = _this$props.onChange,
             formData = _this$props.formData;
-        var copiedFormData = (0, _objectSpread5["default"])({}, formData);
+
+        var copiedFormData = _objectSpread({}, formData);
+
         delete copiedFormData[key];
         onChange(copiedFormData);
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "getAvailableKey", function (preferredKey, formData) {
+
+    _defineProperty(_assertThisInitialized(_this), "getAvailableKey", function (preferredKey, formData) {
       var index = 0;
       var newKey = preferredKey;
 
@@ -157,40 +131,46 @@ function (_Component) {
 
       return newKey;
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "onKeyChange", function (oldValue) {
+
+    _defineProperty(_assertThisInitialized(_this), "onKeyChange", function (oldValue) {
       return function (value, errorSchema) {
         if (oldValue === value) {
           return;
         }
 
         value = _this.getAvailableKey(value, _this.props.formData);
-        var newFormData = (0, _objectSpread5["default"])({}, _this.props.formData);
-        var newKeys = (0, _defineProperty2["default"])({}, oldValue, value);
-        var keyValues = (0, _keys["default"])(newFormData).map(function (key) {
+
+        var newFormData = _objectSpread({}, _this.props.formData);
+
+        var newKeys = _defineProperty({}, oldValue, value);
+
+        var keyValues = _Object$keys(newFormData).map(function (key) {
           var newKey = newKeys[key] || key;
-          return (0, _defineProperty2["default"])({}, newKey, newFormData[key]);
+          return _defineProperty({}, newKey, newFormData[key]);
         });
 
-        var renamedObj = _assign["default"].apply(Object, [{}].concat((0, _toConsumableArray2["default"])(keyValues)));
+        var renamedObj = _extends.apply(void 0, [{}].concat(_toConsumableArray(keyValues)));
 
         _this.setState({
           wasPropertyKeyModified: true
         });
 
-        _this.props.onChange(renamedObj, errorSchema && _this.props.errorSchema && (0, _objectSpread5["default"])({}, _this.props.errorSchema, (0, _defineProperty2["default"])({}, value, errorSchema)));
+        _this.props.onChange(renamedObj, errorSchema && _this.props.errorSchema && _objectSpread({}, _this.props.errorSchema, _defineProperty({}, value, errorSchema)));
       };
     });
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "handleAddClick", function (schema) {
+
+    _defineProperty(_assertThisInitialized(_this), "handleAddClick", function (schema) {
       return function () {
         var type = schema.additionalProperties.type;
-        var newFormData = (0, _objectSpread5["default"])({}, _this.props.formData);
+
+        var newFormData = _objectSpread({}, _this.props.formData);
 
         if (schema.additionalProperties.hasOwnProperty("$ref")) {
           var _this$props$registry = _this.props.registry,
-              registry = _this$props$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props$registry;
-          var refSchema = (0, _utils.retrieveSchema)({
+              registry = _this$props$registry === void 0 ? getDefaultRegistry() : _this$props$registry;
+          var refSchema = retrieveSchema({
             $ref: schema.additionalProperties["$ref"]
-          }, registry.definitions, _this.props.formData);
+          }, registry.rootSchema, _this.props.formData);
           type = refSchema.type;
         }
 
@@ -199,14 +179,15 @@ function (_Component) {
         _this.props.onChange(newFormData);
       };
     });
+
     return _this;
   }
 
-  (0, _createClass2["default"])(ObjectField, [{
+  _createClass(ObjectField, [{
     key: "isRequired",
     value: function isRequired(name) {
       var schema = this.props.schema;
-      return (0, _isArray["default"])(schema.required) && schema.required.indexOf(name) !== -1;
+      return _Array$isArray(schema.required) && schema.required.indexOf(name) !== -1;
     }
   }, {
     key: "getDefaultValue",
@@ -253,36 +234,29 @@ function (_Component) {
           onBlur = _this$props2.onBlur,
           onFocus = _this$props2.onFocus,
           _this$props2$registry = _this$props2.registry,
-          registry = _this$props2$registry === void 0 ? (0, _utils.getDefaultRegistry)() : _this$props2$registry;
-      var definitions = registry.definitions,
+          registry = _this$props2$registry === void 0 ? getDefaultRegistry() : _this$props2$registry;
+      var rootSchema = registry.rootSchema,
           fields = registry.fields,
           formContext = registry.formContext;
       var SchemaField = fields.SchemaField,
           TitleField = fields.TitleField,
           DescriptionField = fields.DescriptionField;
-      var schema = (0, _utils.retrieveSchema)(this.props.schema, definitions, formData); // If this schema has a title defined, but the user has set a new key/label, retain their input.
-
-      var title;
-
-      if (this.state.wasPropertyKeyModified) {
-        title = name;
-      } else {
-        title = schema.title === undefined ? name : schema.title;
-      }
-
+      var schema = retrieveSchema(this.props.schema, rootSchema, formData);
+      var title = schema.title === undefined ? name : schema.title;
       var description = uiSchema["ui:description"] || schema.description;
       var orderedProperties;
 
       try {
-        var properties = (0, _keys["default"])(schema.properties || {});
-        orderedProperties = (0, _utils.orderProperties)(properties, uiSchema["ui:order"]);
+        var properties = _Object$keys(schema.properties || {});
+
+        orderedProperties = orderProperties(properties, uiSchema["ui:order"]);
       } catch (err) {
-        return _react["default"].createElement("div", null, _react["default"].createElement("p", {
+        return React.createElement("div", null, React.createElement("p", {
           className: "config-error",
           style: {
             color: "red"
           }
-        }, "Invalid ", name || "root", " object field configuration:", _react["default"].createElement("em", null, err.message), "."), _react["default"].createElement("pre", null, (0, _stringify["default"])(schema)));
+        }, "Invalid ", name || "root", " object field configuration:", React.createElement("em", null, err.message), "."), React.createElement("pre", null, _JSON$stringify(schema)));
       }
 
       var Template = uiSchema["ui:ObjectFieldTemplate"] || registry.ObjectFieldTemplate || DefaultObjectFieldTemplate;
@@ -292,9 +266,9 @@ function (_Component) {
         TitleField: TitleField,
         DescriptionField: DescriptionField,
         properties: orderedProperties.map(function (name) {
-          var addedByAdditionalProperties = schema.properties[name].hasOwnProperty(_utils.ADDITIONAL_PROPERTY_FLAG);
+          var addedByAdditionalProperties = schema.properties[name].hasOwnProperty(ADDITIONAL_PROPERTY_FLAG);
           return {
-            content: _react["default"].createElement(SchemaField, {
+            content: React.createElement(SchemaField, {
               key: name,
               name: name,
               required: _this2.isRequired(name),
@@ -329,15 +303,16 @@ function (_Component) {
         formData: formData,
         formContext: formContext
       };
-      return _react["default"].createElement(Template, (0, _extends2["default"])({}, templateProps, {
+      return React.createElement(Template, _extends({}, templateProps, {
         onAddClick: this.handleAddClick
       }));
     }
   }]);
-  return ObjectField;
-}(_react.Component);
 
-(0, _defineProperty2["default"])(ObjectField, "defaultProps", {
+  return ObjectField;
+}(Component);
+
+_defineProperty(ObjectField, "defaultProps", {
   uiSchema: {},
   formData: {},
   errorSchema: {},
@@ -351,5 +326,4 @@ if (process.env.NODE_ENV !== "production") {
   ObjectField.propTypes = types.fieldProps;
 }
 
-var _default = ObjectField;
-exports["default"] = _default;
+export default ObjectField;
