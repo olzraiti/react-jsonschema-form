@@ -118,8 +118,6 @@ $RECYCLE.BIN/
 build
 _build
 site
-dist
-lib
 yarn.lock
 
 # IDE
