@@ -107,6 +107,7 @@ function BaseInput(props) {
       return onFocus(inputProps.id, event.target.value);
     }
   })), schema.examples ? _react["default"].createElement("datalist", {
+    key: "datalist_".concat(inputProps.id),
     id: "examples_".concat(inputProps.id)
   }, _toConsumableArray(new Set(schema.examples.concat(schema["default"] ? [schema["default"]] : []))).map(function (example) {
     return _react["default"].createElement("option", {

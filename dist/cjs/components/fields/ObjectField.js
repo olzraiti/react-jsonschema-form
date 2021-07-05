@@ -19,6 +19,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -26,8 +28,6 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -50,31 +50,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function DefaultObjectFieldTemplate(props) {
-  var canExpand = function canExpand() {
-    var formData = props.formData,
-        schema = props.schema,
-        uiSchema = props.uiSchema;
-
-    if (!schema.additionalProperties) {
-      return false;
-    }
-
-    var _getUiOptions = (0, _utils.getUiOptions)(uiSchema),
-        expandable = _getUiOptions.expandable;
-
-    if (expandable === false) {
-      return expandable;
-    } // if ui:options.expandable was not explicitly set to false, we can add
-    // another property if we have not exceeded maxProperties yet
-
-
-    if (schema.maxProperties !== undefined) {
-      return Object.keys(formData).length < schema.maxProperties;
-    }
-
-    return true;
-  };
-
   var TitleField = props.TitleField,
       DescriptionField = props.DescriptionField;
   return _react["default"].createElement("fieldset", {
@@ -90,7 +65,7 @@ function DefaultObjectFieldTemplate(props) {
     formContext: props.formContext
   }), props.properties.map(function (prop) {
     return prop.content;
-  }), canExpand() && _react["default"].createElement(_AddButton["default"], {
+  }), (0, _utils.canExpand)(props.schema, props.uiSchema, props.formData) && _react["default"].createElement(_AddButton["default"], {
     className: "object-property-expand",
     onClick: props.onAddClick(props.schema),
     disabled: props.disabled || props.readonly
@@ -181,8 +156,7 @@ function (_Component) {
           var newKey = newKeys[key] || key;
           return _defineProperty({}, newKey, newFormData[key]);
         });
-
-        var renamedObj = _extends.apply(void 0, [{}].concat(_toConsumableArray(keyValues)));
+        var renamedObj = Object.assign.apply(Object, [{}].concat(_toConsumableArray(keyValues)));
 
         _this.setState({
           wasPropertyKeyModified: true
@@ -299,13 +273,15 @@ function (_Component) {
         DescriptionField: DescriptionField,
         properties: orderedProperties.map(function (name) {
           var addedByAdditionalProperties = schema.properties[name].hasOwnProperty(_utils.ADDITIONAL_PROPERTY_FLAG);
+          var fieldUiSchema = addedByAdditionalProperties ? uiSchema.additionalProperties : uiSchema[name];
+          var hidden = fieldUiSchema && fieldUiSchema["ui:widget"] === "hidden";
           return {
             content: _react["default"].createElement(SchemaField, {
               key: name,
               name: name,
               required: _this2.isRequired(name),
               schema: schema.properties[name],
-              uiSchema: addedByAdditionalProperties ? uiSchema.additionalProperties : uiSchema[name],
+              uiSchema: fieldUiSchema,
               errorSchema: errorSchema[name],
               idSchema: idSchema[name],
               idPrefix: idPrefix,
@@ -323,7 +299,8 @@ function (_Component) {
             name: name,
             readonly: readonly,
             disabled: disabled,
-            required: required
+            required: required,
+            hidden: hidden
           };
         }),
         readonly: readonly,
@@ -333,7 +310,8 @@ function (_Component) {
         uiSchema: uiSchema,
         schema: schema,
         formData: formData,
-        formContext: formContext
+        formContext: formContext,
+        registry: registry
       };
       return _react["default"].createElement(Template, _extends({}, templateProps, {
         onAddClick: this.handleAddClick

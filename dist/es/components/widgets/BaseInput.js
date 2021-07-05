@@ -1,8 +1,17 @@
-import _Set from "@babel/runtime-corejs2/core-js/set";
-import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray";
-import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
-import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
-import _JSON$stringify from "@babel/runtime-corejs2/core-js/json/stringify";
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -11,7 +20,7 @@ function BaseInput(props) {
   // exclude the "options" and "schema" ones here.
   if (!props.id) {
     console.log("No id for", props);
-    throw new Error("no id for props ".concat(_JSON$stringify(props)));
+    throw new Error("no id for props ".concat(JSON.stringify(props)));
   }
 
   var value = props.value,
@@ -88,8 +97,9 @@ function BaseInput(props) {
       return onFocus(inputProps.id, event.target.value);
     }
   })), schema.examples ? React.createElement("datalist", {
+    key: "datalist_".concat(inputProps.id),
     id: "examples_".concat(inputProps.id)
-  }, _toConsumableArray(new _Set(schema.examples.concat(schema["default"] ? [schema["default"]] : []))).map(function (example) {
+  }, _toConsumableArray(new Set(schema.examples.concat(schema["default"] ? [schema["default"]] : []))).map(function (example) {
     return React.createElement("option", {
       key: example,
       value: example

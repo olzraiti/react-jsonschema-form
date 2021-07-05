@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.canExpand = canExpand;
 exports.getDefaultRegistry = getDefaultRegistry;
 exports.getSchemaType = getSchemaType;
 exports.getWidget = getWidget;
@@ -49,13 +50,17 @@ var ReactIs = _interopRequireWildcard(require("react-is"));
 
 var _jsonSchemaMergeAllof = _interopRequireDefault(require("json-schema-merge-allof"));
 
-var _fill = _interopRequireDefault(require("core-js/library/fn/array/fill"));
-
-var _validate = _interopRequireWildcard(require("./validate"));
+var _fill = _interopRequireDefault(require("core-js-pure/features/array/fill"));
 
 var _union = _interopRequireDefault(require("lodash/union"));
 
 var _jsonpointer = _interopRequireDefault(require("jsonpointer"));
+
+var _fields = _interopRequireDefault(require("./components/fields"));
+
+var _widgets = _interopRequireDefault(require("./components/widgets"));
+
+var _validate = _interopRequireWildcard(require("./validate"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
@@ -139,10 +144,31 @@ var widgetMap = {
   }
 };
 
+function canExpand(schema, uiSchema, formData) {
+  if (!schema.additionalProperties) {
+    return false;
+  }
+
+  var _getUiOptions = getUiOptions(uiSchema),
+      expandable = _getUiOptions.expandable;
+
+  if (expandable === false) {
+    return expandable;
+  } // if ui:options.expandable was not explicitly set to false, we can add
+  // another property if we have not exceeded maxProperties yet
+
+
+  if (schema.maxProperties !== undefined) {
+    return Object.keys(formData).length < schema.maxProperties;
+  }
+
+  return true;
+}
+
 function getDefaultRegistry() {
   return {
-    fields: require("./components/fields")["default"],
-    widgets: require("./components/widgets")["default"],
+    fields: _fields["default"],
+    widgets: _widgets["default"],
     definitions: {},
     rootSchema: {},
     formContext: {}
@@ -378,8 +404,7 @@ function mergeDefaultsWithFormData(defaults, formData) {
       return value;
     });
   } else if (isObject(formData)) {
-    var acc = _extends({}, defaults); // Prevent mutation of source object.
-
+    var acc = Object.assign({}, defaults); // Prevent mutation of source object.
 
     return Object.keys(formData).reduce(function (acc, key) {
       acc[key] = mergeDefaultsWithFormData(defaults ? defaults[key] : {}, formData[key]);
@@ -446,10 +471,8 @@ function isObject(thing) {
 
 function mergeObjects(obj1, obj2) {
   var concatArrays = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
   // Recursively merge deeply nested objects.
-  var acc = _extends({}, obj1); // Prevent mutation of source object.
-
+  var acc = Object.assign({}, obj1); // Prevent mutation of source object.
 
   return Object.keys(obj2).reduce(function (acc, key) {
     var left = obj1 ? obj1[key] : {},
@@ -631,6 +654,7 @@ function optionsList(schema) {
       var value = toConstant(schema);
       var label = schema.title || String(value);
       return {
+        schema: schema,
         label: label,
         value: value
       };
@@ -907,8 +931,7 @@ function withExactlyOneSubschema(schema, rootSchema, formData, dependencyKey, on
 
 
 function mergeSchemas(obj1, obj2) {
-  var acc = _extends({}, obj1); // Prevent mutation of source object.
-
+  var acc = Object.assign({}, obj1); // Prevent mutation of source object.
 
   return Object.keys(obj2).reduce(function (acc, key) {
     var left = obj1 ? obj1[key] : {},
@@ -1260,17 +1283,17 @@ function getMatchingOption(formData, options, rootSchema) {
         shallowClone.allOf.push(requiresAnyOf);
         augmentedSchema = shallowClone;
       } else {
-        augmentedSchema = _extends({}, option, requiresAnyOf);
+        augmentedSchema = Object.assign({}, option, requiresAnyOf);
       } // Remove the "required" field as it's likely that not all fields have
       // been filled in yet, which will mean that the schema is not valid
 
 
       delete augmentedSchema.required;
 
-      if ((0, _validate.isValid)(augmentedSchema, formData)) {
+      if ((0, _validate.isValid)(augmentedSchema, formData, rootSchema)) {
         return _i2;
       }
-    } else if ((0, _validate.isValid)(options[_i2], formData)) {
+    } else if ((0, _validate.isValid)(option, formData, rootSchema)) {
       return _i2;
     }
   }

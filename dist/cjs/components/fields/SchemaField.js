@@ -121,7 +121,8 @@ function LabelInput(props) {
 }
 
 function Help(props) {
-  var help = props.help;
+  var id = props.id,
+      help = props.help;
 
   if (!help) {
     return null;
@@ -129,11 +130,13 @@ function Help(props) {
 
   if (typeof help === "string") {
     return _react["default"].createElement("p", {
+      id: id,
       className: "help-block"
     }, help);
   }
 
   return _react["default"].createElement("div", {
+    id: id,
     className: "help-block"
   }, help);
 }
@@ -270,6 +273,7 @@ function SchemaFieldRender(props) {
       errorSchema = props.errorSchema,
       idPrefix = props.idPrefix,
       name = props.name,
+      onChange = props.onChange,
       onKeyChange = props.onKeyChange,
       onDropPropertyClick = props.onDropPropertyClick,
       required = props.required,
@@ -314,7 +318,6 @@ function SchemaFieldRender(props) {
     rawErrors: __errors
   }));
 
-  var type = schema.type;
   var id = idSchema.$id; // If this schema has a title defined, but the user has set a new key/label, retain their input.
 
   var label;
@@ -329,7 +332,7 @@ function SchemaFieldRender(props) {
   var errors = __errors;
   var help = uiSchema["ui:help"];
   var hidden = uiSchema["ui:widget"] === "hidden";
-  var classNames = ["form-group", "field", "field-".concat(type), errors && errors.length > 0 ? "field-error has-error has-danger" : "", uiSchema.classNames].join(" ").trim();
+  var classNames = ["form-group", "field", "field-".concat(schema.type), errors && errors.length > 0 ? "field-error has-error has-danger" : "", uiSchema.classNames].join(" ").trim();
   var fieldProps = {
     description: _react["default"].createElement(DescriptionField, {
       id: id + "__description",
@@ -338,6 +341,7 @@ function SchemaFieldRender(props) {
     }),
     rawDescription: description,
     help: _react["default"].createElement(Help, {
+      id: id + "__help",
       help: help
     }),
     rawHelp: typeof help === "string" ? help : undefined,
@@ -348,6 +352,7 @@ function SchemaFieldRender(props) {
     id: id,
     label: label,
     hidden: hidden,
+    onChange: onChange,
     onKeyChange: onKeyChange,
     onDropPropertyClick: onDropPropertyClick,
     required: required,
@@ -356,6 +361,7 @@ function SchemaFieldRender(props) {
     displayLabel: displayLabel,
     classNames: classNames,
     formContext: formContext,
+    formData: formData,
     fields: fields,
     schema: schema,
     uiSchema: uiSchema,
@@ -372,7 +378,9 @@ function SchemaFieldRender(props) {
     onBlur: props.onBlur,
     onChange: props.onChange,
     onFocus: props.onFocus,
-    options: schema.anyOf,
+    options: schema.anyOf.map(function (_schema) {
+      return (0, _utils.retrieveSchema)(_schema, rootSchema, formData);
+    }),
     baseType: schema.type,
     registry: registry,
     schema: schema,
@@ -386,7 +394,9 @@ function SchemaFieldRender(props) {
     onBlur: props.onBlur,
     onChange: props.onChange,
     onFocus: props.onFocus,
-    options: schema.oneOf,
+    options: schema.oneOf.map(function (_schema) {
+      return (0, _utils.retrieveSchema)(_schema, rootSchema, formData);
+    }),
     baseType: schema.type,
     registry: registry,
     schema: schema,

@@ -1,27 +1,36 @@
-import _Symbol$toPrimitive from "@babel/runtime-corejs2/core-js/symbol/to-primitive";
-import _Set from "@babel/runtime-corejs2/core-js/set";
-import _Array$from from "@babel/runtime-corejs2/core-js/array/from";
-import _toConsumableArray from "@babel/runtime-corejs2/helpers/esm/toConsumableArray";
-import _Number$isNaN from "@babel/runtime-corejs2/core-js/number/is-nan";
-import _defineProperty from "@babel/runtime-corejs2/helpers/esm/defineProperty";
-import _Object$keys from "@babel/runtime-corejs2/core-js/object/keys";
-import _Array$isArray from "@babel/runtime-corejs2/core-js/array/is-array";
-import _typeof from "@babel/runtime-corejs2/helpers/esm/typeof";
-import _extends from "@babel/runtime-corejs2/helpers/esm/extends";
-import _objectSpread from "@babel/runtime-corejs2/helpers/esm/objectSpread";
-import _objectWithoutProperties from "@babel/runtime-corejs2/helpers/esm/objectWithoutProperties";
-
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[_Symbol$toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 import React from "react";
 import * as ReactIs from "react-is";
 import mergeAllOf from "json-schema-merge-allof";
-import fill from "core-js/library/fn/array/fill";
-import validateFormData, { isValid } from "./validate";
+import fill from "core-js-pure/features/array/fill";
 import union from "lodash/union";
 import jsonpointer from "jsonpointer";
+import fields from "./components/fields";
+import widgets from "./components/widgets";
+import validateFormData, { isValid } from "./validate";
 export var ADDITIONAL_PROPERTY_FLAG = "__additional_property";
 var widgetMap = {
   "boolean": {
@@ -74,10 +83,30 @@ var widgetMap = {
     hidden: "HiddenWidget"
   }
 };
+export function canExpand(schema, uiSchema, formData) {
+  if (!schema.additionalProperties) {
+    return false;
+  }
+
+  var _getUiOptions = getUiOptions(uiSchema),
+      expandable = _getUiOptions.expandable;
+
+  if (expandable === false) {
+    return expandable;
+  } // if ui:options.expandable was not explicitly set to false, we can add
+  // another property if we have not exceeded maxProperties yet
+
+
+  if (schema.maxProperties !== undefined) {
+    return Object.keys(formData).length < schema.maxProperties;
+  }
+
+  return true;
+}
 export function getDefaultRegistry() {
   return {
-    fields: require("./components/fields")["default"],
-    widgets: require("./components/widgets")["default"],
+    fields: fields,
+    widgets: widgets,
     definitions: {},
     rootSchema: {},
     formContext: {}
@@ -194,7 +223,7 @@ function computeDefaults(_schema, parentDefaults, rootSchema) {
     return computeDefaults(resolvedSchema, defaults, rootSchema, formData, includeUndefinedValues);
   } else if (isFixedItems(schema)) {
     defaults = schema.items.map(function (itemSchema, idx) {
-      return computeDefaults(itemSchema, _Array$isArray(parentDefaults) ? parentDefaults[idx] : undefined, rootSchema, formData, includeUndefinedValues);
+      return computeDefaults(itemSchema, Array.isArray(parentDefaults) ? parentDefaults[idx] : undefined, rootSchema, formData, includeUndefinedValues);
     });
   } else if ("oneOf" in schema) {
     schema = schema.oneOf[getMatchingOption(undefined, schema.oneOf, rootSchema)];
@@ -210,7 +239,7 @@ function computeDefaults(_schema, parentDefaults, rootSchema) {
   switch (getSchemaType(schema)) {
     // We need to recur for object schema inner default values.
     case "object":
-      return _Object$keys(schema.properties || {}).reduce(function (acc, key) {
+      return Object.keys(schema.properties || {}).reduce(function (acc, key) {
         // Compute the defaults for this node, with the parent defaults we might
         // have from a previous run: defaults[key].
         var computedDefault = computeDefaults(schema.properties[key], (defaults || {})[key], rootSchema, (formData || {})[key], includeUndefinedValues);
@@ -224,14 +253,14 @@ function computeDefaults(_schema, parentDefaults, rootSchema) {
 
     case "array":
       // Inject defaults into existing array defaults
-      if (_Array$isArray(defaults)) {
+      if (Array.isArray(defaults)) {
         defaults = defaults.map(function (item, idx) {
           return computeDefaults(schema.items[idx] || schema.additionalItems || {}, item, rootSchema);
         });
       } // Deeply inject defaults into already existing form data
 
 
-      if (_Array$isArray(rawFormData)) {
+      if (Array.isArray(rawFormData)) {
         defaults = rawFormData.map(function (item, idx) {
           return computeDefaults(schema.items, (defaults || {})[idx], rootSchema, item);
         });
@@ -244,7 +273,7 @@ function computeDefaults(_schema, parentDefaults, rootSchema) {
           if (schema.minItems > defaultsLength) {
             var defaultEntries = defaults || []; // populate the array with the defaults
 
-            var fillerSchema = _Array$isArray(schema.items) ? schema.additionalItems : schema.items;
+            var fillerSchema = Array.isArray(schema.items) ? schema.additionalItems : schema.items;
             var fillerEntries = fill(new Array(schema.minItems - defaultsLength), computeDefaults(fillerSchema, fillerSchema.defaults, rootSchema)); // then fill up the rest with either the item default or empty, up to minItems
 
             return defaultEntries.concat(fillerEntries);
@@ -275,7 +304,7 @@ export function getDefaultFormState(_schema, formData) {
     return defaults;
   }
 
-  if (isObject(formData) || _Array$isArray(formData)) {
+  if (isObject(formData) || Array.isArray(formData)) {
     return mergeDefaultsWithFormData(defaults, formData);
   }
 
@@ -296,8 +325,8 @@ export function getDefaultFormState(_schema, formData) {
  */
 
 export function mergeDefaultsWithFormData(defaults, formData) {
-  if (_Array$isArray(formData)) {
-    if (!_Array$isArray(defaults)) {
+  if (Array.isArray(formData)) {
+    if (!Array.isArray(defaults)) {
       defaults = [];
     }
 
@@ -309,10 +338,9 @@ export function mergeDefaultsWithFormData(defaults, formData) {
       return value;
     });
   } else if (isObject(formData)) {
-    var acc = _extends({}, defaults); // Prevent mutation of source object.
+    var acc = Object.assign({}, defaults); // Prevent mutation of source object.
 
-
-    return _Object$keys(formData).reduce(function (acc, key) {
+    return Object.keys(formData).reduce(function (acc, key) {
       acc[key] = mergeDefaultsWithFormData(defaults ? defaults[key] : {}, formData[key]);
       return acc;
     }, acc);
@@ -322,7 +350,7 @@ export function mergeDefaultsWithFormData(defaults, formData) {
 }
 export function getUiOptions(uiSchema) {
   // get all passed options from ui:widget, ui:options, and ui:<optionName>
-  return _Object$keys(uiSchema).filter(function (key) {
+  return Object.keys(uiSchema).filter(function (key) {
     return key.indexOf("ui:") === 0;
   }).reduce(function (options, key) {
     var value = uiSchema[key];
@@ -369,22 +397,20 @@ export function isObject(thing) {
     return false;
   }
 
-  return _typeof(thing) === "object" && thing !== null && !_Array$isArray(thing);
+  return _typeof(thing) === "object" && thing !== null && !Array.isArray(thing);
 }
 export function mergeObjects(obj1, obj2) {
   var concatArrays = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
   // Recursively merge deeply nested objects.
-  var acc = _extends({}, obj1); // Prevent mutation of source object.
+  var acc = Object.assign({}, obj1); // Prevent mutation of source object.
 
-
-  return _Object$keys(obj2).reduce(function (acc, key) {
+  return Object.keys(obj2).reduce(function (acc, key) {
     var left = obj1 ? obj1[key] : {},
         right = obj2[key];
 
     if (obj1 && obj1.hasOwnProperty(key) && isObject(right)) {
       acc[key] = mergeObjects(left, right, concatArrays);
-    } else if (concatArrays && _Array$isArray(left) && _Array$isArray(right)) {
+    } else if (concatArrays && Array.isArray(left) && Array.isArray(right)) {
       acc[key] = left.concat(right);
     } else {
       acc[key] = right;
@@ -414,7 +440,7 @@ export function asNumber(value) {
   }
 
   var n = Number(value);
-  var valid = typeof n === "number" && !_Number$isNaN(n);
+  var valid = typeof n === "number" && !Number.isNaN(n);
 
   if (/\.\d*0$/.test(value)) {
     // It's a number, that's cool - but we need it as a string so it doesn't screw
@@ -426,7 +452,7 @@ export function asNumber(value) {
   return valid ? n : value;
 }
 export function orderProperties(properties, order) {
-  if (!_Array$isArray(order)) {
+  if (!Array.isArray(order)) {
     return properties;
   }
 
@@ -474,10 +500,10 @@ export function orderProperties(properties, order) {
  */
 
 export function isConstant(schema) {
-  return _Array$isArray(schema["enum"]) && schema["enum"].length === 1 || schema.hasOwnProperty("const");
+  return Array.isArray(schema["enum"]) && schema["enum"].length === 1 || schema.hasOwnProperty("const");
 }
 export function toConstant(schema) {
-  if (_Array$isArray(schema["enum"]) && schema["enum"].length === 1) {
+  if (Array.isArray(schema["enum"]) && schema["enum"].length === 1) {
     return schema["enum"][0];
   } else if (schema.hasOwnProperty("const")) {
     return schema["const"];
@@ -490,9 +516,9 @@ export function isSelect(_schema) {
   var schema = retrieveSchema(_schema, rootSchema);
   var altSchemas = schema.oneOf || schema.anyOf;
 
-  if (_Array$isArray(schema["enum"])) {
+  if (Array.isArray(schema["enum"])) {
     return true;
-  } else if (_Array$isArray(altSchemas)) {
+  } else if (Array.isArray(altSchemas)) {
     return altSchemas.every(function (altSchemas) {
       return isConstant(altSchemas);
     });
@@ -522,7 +548,7 @@ export function isFilesArray(schema, uiSchema) {
   return false;
 }
 export function isFixedItems(schema) {
-  return _Array$isArray(schema.items) && schema.items.length > 0 && schema.items.every(function (item) {
+  return Array.isArray(schema.items) && schema.items.length > 0 && schema.items.every(function (item) {
     return isObject(item);
   });
 }
@@ -548,6 +574,7 @@ export function optionsList(schema) {
       var value = toConstant(schema);
       var label = schema.title || String(value);
       return {
+        schema: schema,
         label: label,
         value: value
       };
@@ -580,7 +607,7 @@ export function findSchemaDefinition($ref) {
 //  based on the data we are defining
 
 export var guessType = function guessType(value) {
-  if (_Array$isArray(value)) {
+  if (Array.isArray(value)) {
     return "array";
   } else if (typeof value === "string") {
     return "string";
@@ -605,8 +632,7 @@ export function stubExistingAdditionalProperties(schema) {
   schema = _objectSpread({}, schema, {
     properties: _objectSpread({}, schema.properties)
   });
-
-  _Object$keys(formData).forEach(function (key) {
+  Object.keys(formData).forEach(function (key) {
     if (schema.properties.hasOwnProperty(key)) {
       // No need to stub, our schema already has the property
       return;
@@ -631,7 +657,6 @@ export function stubExistingAdditionalProperties(schema) {
 
     schema.properties[key][ADDITIONAL_PROPERTY_FLAG] = true;
   });
-
   return schema;
 }
 export function resolveSchema(schema) {
@@ -732,7 +757,7 @@ function processDependencies(dependencies, resolvedSchema, rootSchema, formData)
     var dependencyValue = dependencies[dependencyKey],
         remainingDependencies = _objectWithoutProperties(dependencies, [dependencyKey].map(_toPropertyKey));
 
-    if (_Array$isArray(dependencyValue)) {
+    if (Array.isArray(dependencyValue)) {
       resolvedSchema = withDependentProperties(resolvedSchema, dependencyValue);
     } else if (isObject(dependencyValue)) {
       resolvedSchema = withDependentSchema(resolvedSchema, rootSchema, formData, dependencyKey, dependencyValue);
@@ -749,7 +774,7 @@ function withDependentProperties(schema, additionallyRequired) {
     return schema;
   }
 
-  var required = _Array$isArray(schema.required) ? _Array$from(new _Set([].concat(_toConsumableArray(schema.required), _toConsumableArray(additionallyRequired)))) : additionallyRequired;
+  var required = Array.isArray(schema.required) ? Array.from(new Set([].concat(_toConsumableArray(schema.required), _toConsumableArray(additionallyRequired)))) : additionallyRequired;
   return _objectSpread({}, schema, {
     required: required
   });
@@ -764,7 +789,7 @@ function withDependentSchema(schema, rootSchema, formData, dependencyKey, depend
 
   if (oneOf === undefined) {
     return schema;
-  } else if (!_Array$isArray(oneOf)) {
+  } else if (!Array.isArray(oneOf)) {
     throw new Error("invalid: it is some ".concat(_typeof(oneOf), " instead of an array"));
   } // Resolve $refs inside oneOf.
 
@@ -820,16 +845,15 @@ function withExactlyOneSubschema(schema, rootSchema, formData, dependencyKey, on
 
 
 export function mergeSchemas(obj1, obj2) {
-  var acc = _extends({}, obj1); // Prevent mutation of source object.
+  var acc = Object.assign({}, obj1); // Prevent mutation of source object.
 
-
-  return _Object$keys(obj2).reduce(function (acc, key) {
+  return Object.keys(obj2).reduce(function (acc, key) {
     var left = obj1 ? obj1[key] : {},
         right = obj2[key];
 
     if (obj1 && obj1.hasOwnProperty(key) && isObject(right)) {
       acc[key] = mergeSchemas(left, right);
-    } else if (obj1 && obj2 && (getSchemaType(obj1) === "object" || getSchemaType(obj2) === "object") && key === "required" && _Array$isArray(left) && _Array$isArray(right)) {
+    } else if (obj1 && obj2 && (getSchemaType(obj1) === "object" || getSchemaType(obj2) === "object") && key === "required" && Array.isArray(left) && Array.isArray(right)) {
       // Don't include duplicate values when merging
       // "required" fields.
       acc[key] = union(left, right);
@@ -878,10 +902,8 @@ export function deepEquals(a, b) {
       return false;
     }
 
-    var ka = _Object$keys(a);
-
-    var kb = _Object$keys(b); // don't bother with stack acrobatics if there's nothing there
-
+    var ka = Object.keys(a);
+    var kb = Object.keys(b); // don't bother with stack acrobatics if there's nothing there
 
     if (ka.length === 0 && kb.length === 0) {
       return true;
@@ -910,12 +932,12 @@ export function deepEquals(a, b) {
       }
     }
 
-    var key;
+    var _key;
 
     for (var k = ka.length - 1; k >= 0; k--) {
-      key = ka[k];
+      _key = ka[k];
 
-      if (!deepEquals(a[key], b[key], ca, cb)) {
+      if (!deepEquals(a[_key], b[_key], ca, cb)) {
         return false;
       }
     }
@@ -979,7 +1001,7 @@ export function toPathSchema(schema) {
     pathSchema.__rjsf_additionalProperties = true;
   }
 
-  if (schema.hasOwnProperty("items") && _Array$isArray(formData)) {
+  if (schema.hasOwnProperty("items") && Array.isArray(formData)) {
     formData.forEach(function (element, i) {
       pathSchema[i] = toPathSchema(schema.items, "".concat(name, ".").concat(i), rootSchema, element);
     });
@@ -1009,7 +1031,7 @@ export function parseDateString(dateString) {
 
   var date = new Date(dateString);
 
-  if (_Number$isNaN(date.getTime())) {
+  if (Number.isNaN(date.getTime())) {
     throw new Error("Unable to parse date " + dateString);
   }
 
@@ -1098,8 +1120,8 @@ export function dataURItoBlob(dataURI) {
   var binary = atob(splitted[1]);
   var array = [];
 
-  for (var i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
+  for (var _i = 0; _i < binary.length; _i++) {
+    array.push(binary.charCodeAt(_i));
   } // Create the blob object
 
 
@@ -1129,8 +1151,8 @@ export function rangeSpec(schema) {
   return spec;
 }
 export function getMatchingOption(formData, options, rootSchema) {
-  for (var i = 0; i < options.length; i++) {
-    var option = options[i]; // If the schema describes an object then we need to add slightly more
+  for (var _i2 = 0; _i2 < options.length; _i2++) {
+    var option = options[_i2]; // If the schema describes an object then we need to add slightly more
     // strict matching to the schema, because unless the schema uses the
     // "requires" keyword, an object will match the schema as long as it
     // doesn't have matching keys with a conflicting type. To do this we use an
@@ -1142,7 +1164,7 @@ export function getMatchingOption(formData, options, rootSchema) {
       // Create an "anyOf" schema that requires at least one of the keys in the
       // "properties" object
       var requiresAnyOf = {
-        anyOf: _Object$keys(option.properties).map(function (key) {
+        anyOf: Object.keys(option.properties).map(function (key) {
           return {
             required: [key]
           };
@@ -1164,18 +1186,18 @@ export function getMatchingOption(formData, options, rootSchema) {
         shallowClone.allOf.push(requiresAnyOf);
         augmentedSchema = shallowClone;
       } else {
-        augmentedSchema = _extends({}, option, requiresAnyOf);
+        augmentedSchema = Object.assign({}, option, requiresAnyOf);
       } // Remove the "required" field as it's likely that not all fields have
       // been filled in yet, which will mean that the schema is not valid
 
 
       delete augmentedSchema.required;
 
-      if (isValid(augmentedSchema, formData)) {
-        return i;
+      if (isValid(augmentedSchema, formData, rootSchema)) {
+        return _i2;
       }
-    } else if (isValid(options[i], formData)) {
-      return i;
+    } else if (isValid(option, formData, rootSchema)) {
+      return _i2;
     }
   }
 

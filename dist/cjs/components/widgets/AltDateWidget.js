@@ -152,9 +152,11 @@ function (_Component) {
   }
 
   _createClass(AltDateWidget, [{
-    key: "UNSAFE_componentWillReceiveProps",
-    value: function UNSAFE_componentWillReceiveProps(nextProps) {
-      this.setState((0, _utils.parseDateString)(nextProps.value, nextProps.time));
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (prevProps.value && prevProps.value !== (0, _utils.parseDateString)(this.props.value, this.props.time)) {
+        this.setState((0, _utils.parseDateString)(this.props.value, this.props.time));
+      }
     }
   }, {
     key: "shouldComponentUpdate",
